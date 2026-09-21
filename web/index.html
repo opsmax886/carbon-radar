@@ -138,6 +138,10 @@
       <button data-cat="methodology">方法学</button>
       <button data-cat="news">动态</button>
     </div>
+    <div class="seg" id="views" title="切换列表的组织方式">
+      <button data-view="region" class="on">按地区</button>
+      <button data-view="time">按时间</button>
+    </div>
     <select id="region"><option value="all">全部地区</option></select>
     <select id="track"><option value="all">全部业务线</option></select>
     <select id="sort">
@@ -181,7 +185,12 @@
 
   // 汇总所有天的条目（默认展示最新一天）
   var state = {cat:'all', region:'all', track:'all', sort:'score',
-               q:'', onlynew:false, onlytender:false, day:null};
+               q:'', onlynew:false, onlytender:false, day:null, view:'region'};
+  // 记住上次选的视图,下次打开不用再切
+  try{
+    var sv = localStorage.getItem('carbon_view');
+    if(sv === 'time' || sv === 'region') state.view = sv;
+  }catch(e){}
 
   function allItems(){
     var days = (DATA.days||[]);
@@ -194,6 +203,22 @@
   }
 
   function scoreClass(s){ return s>=80?'s-hot': s>=60?'s-warm': s>=35?'s-mid':'s-low'; }
+
+  // 时间视图里把日期写成人话:"今天 · 2026-09-21" / "昨天 · ..." / "3 天前 · ..."
+  function dayLabel(d){
+    if(!d || d === '无日期') return '无日期';
+    var base = (DATA && DATA.today) ? DATA.today : '';
+    try{
+      if(base){
+        var t = new Date(base + 'T00:00:00'), x = new Date(d + 'T00:00:00');
+        var diff = Math.round((t - x) / 86400000);
+        if(diff === 0) return '今天 · ' + d;
+        if(diff === 1) return '昨天 · ' + d;
+        if(diff > 1 && diff <= 7) return diff + ' 天前 · ' + d;
+      }
+    }catch(e){}
+    return d;
+  }
 
   function match(it){
     if(state.cat!=='all' && it.category!==state.cat) return false;
@@ -241,17 +266,34 @@
       return;
     }
 
-    var groups = {};
-    items.forEach(function(it){
-      var r = it.region || '未分类';
-      (groups[r] = groups[r]||[]).push(it);
-    });
-    // 地区排序：全国/未分类置后，其余按条数降序
-    var keys = Object.keys(groups).sort(function(a,b){
-      var pa = (a==='全国')?2:(a==='未分类'?3:1), pb=(b==='全国')?2:(b==='未分类'?3:1);
-      if(pa!==pb) return pa-pb;
-      return groups[b].length-groups[a].length;
-    });
+    // 按视图分组:
+    //   地区视图 —— 按 region 分组(你现在用的)
+    //   时间视图 —— 按日期分组、全国扁平,一眼就能看到全国最新的信息
+    var groups = {}, keys = [];
+    if(state.view === 'time'){
+      items.forEach(function(it){
+        var k = it.date || '无日期';
+        if(!groups[k]){ groups[k] = []; keys.push(k); }
+        groups[k].push(it);
+      });
+      keys.sort(function(a,b){
+        if(a === '无日期') return 1;
+        if(b === '无日期') return -1;
+        return b.localeCompare(a);          // 日期倒序
+      });
+    } else {
+      items.forEach(function(it){
+        var r = it.region || '未分类';
+        if(!groups[r]) keys.push(r);
+        (groups[r] = groups[r]||[]).push(it);
+      });
+      // 地区排序：全国/未分类置后，其余按条数降序
+      keys.sort(function(a,b){
+        var pa = (a==='全国')?2:(a==='未分类'?3:1), pb=(b==='全国')?2:(b==='未分类'?3:1);
+        if(pa!==pb) return pa-pb;
+        return groups[b].length-groups[a].length;
+      });
+    }
 
     var html = '';
     var stale = (st.stale_sources||[]);
@@ -262,8 +304,9 @@
 
     keys.forEach(function(k){
       var arr = groups[k];
+      var label = (state.view === 'time') ? dayLabel(k) : k;
       html += '<section class="region" data-r="'+esc(k)+'">'+
-        '<div class="rhead"><span class="arrow">▼</span>'+esc(k)+
+        '<div class="rhead"><span class="arrow">▼</span>'+esc(label)+
         ' <span class="cnt">'+arr.length+' 条</span></div><div class="items">';
       arr.forEach(function(it){ html += card(it); });
       html += '</div></section>';
@@ -333,6 +376,10 @@
 
   // 初始化下拉
   function initControls(){
+    // 恢复上次选择的视图(按地区 / 按时间)
+    document.querySelectorAll('#views button').forEach(function(b){
+      b.classList.toggle('on', b.dataset.view === state.view);
+    });
     var items = [];
     (DATA.days||[]).forEach(function(d){ items = items.concat(d.items||[]); });
     var regions = {}, tracks = {};
@@ -367,6 +414,14 @@
     var b=e.target.closest('button'); if(!b) return;
     this.querySelectorAll('button').forEach(function(x){x.classList.remove('on')});
     b.classList.add('on'); state.cat=b.dataset.cat; render();
+  };
+  document.getElementById('views').onclick = function(e){
+    var b=e.target.closest('button'); if(!b) return;
+    this.querySelectorAll('button').forEach(function(x){x.classList.remove('on')});
+    b.classList.add('on');
+    state.view = b.dataset.view;
+    try{ localStorage.setItem('carbon_view', state.view); }catch(err){}
+    render();
   };
   document.getElementById('hhead').onclick = function(){
     document.getElementById('hbox').classList.toggle('open');
