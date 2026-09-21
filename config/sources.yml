@@ -112,15 +112,23 @@ sources:
     status: 首页实测可访问,但列表接口为 POST + JS 渲染,需单独适配
     note: 已加入待接入清单,见 docs/数据源接入指南.md
 
-  - id: ccgp
-    name: 中国政府采购网
+  - id: ccgp_keywords
+    name: 中国政府采购网(按碳类关键词)
     kind: tender
+    adapter: html_list
+    # 该站必须"一个关键词一次请求",模板里的 {kw} 会被自动 URL 编码
+    url_template: "https://search.ccgp.gov.cn/bxsearch?searchtype=1&page_index=1&bidSort=0&buyerName=&projectId=&pinMu=0&bidType=0&dbselect=bidx&kw={kw}&start_time=&end_time=&timeType=5&displayZone=&zoneId=&pppStatus=0&agentName="
+    base: https://search.ccgp.gov.cn/
+    keywords: [碳核查, 温室气体, 碳足迹, 碳中和, 碳排放]
+    link_filter: 'cggg/.*t\d{8}_\d+\.htm'
+    encoding: utf-8
+    request_delay: 6
+    max_items: 20          # 每个关键词取多少条
+    total_max: 100         # 5 个关键词合计上限
     default_region: 全国
-    adapter: manual
-    url: https://search.ccgp.gov.cn/bxsearch
-    enabled: false
-    status: ❌ 实测触发反爬("您的访问过于频繁"),不直连
-    note: 覆盖最全但反爬最严;若后期需要,建议购买商业标讯API(剑鱼/千里马)
+    enabled: true
+    status: ✅ 实测云端可访问(探测到 21 条/20 条招标)—— 全国覆盖,一次覆盖所有省份
+    note: 之前误判为"反爬不可用",实测是本地 IP 的问题;云端正常。为降低被封风险已放慢到 6 秒/请求
 
   # ==========================================================
   # 二、政策法规(官方权威)
@@ -541,9 +549,10 @@ sources:
     adapter: html_list
     url: http://www.ccgp-beijing.gov.cn/
     base: http://www.ccgp-beijing.gov.cn/
-    link_filter: ''
-    encoding: ''
-    enabled: false
+    link_filter: '/zhxx/[a-z]+/\d{4}/\d+/[a-f0-9]{16,}\.htm'
+    encoding: utf-8
+    max_items: 30
+    enabled: true
     default_region: 北京
     status: 候选源 —— 待云端探测确认可用性
     note: 探测通过后,把 enabled 改成 true,并补上精确的 link_filter

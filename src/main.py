@@ -171,16 +171,21 @@ def run_probe(cfg_sources: dict) -> int:
         rec = {"id": sid, "name": src.get("name", sid), "url": src.get("url", ""),
                "enabled": bool(src.get("enabled"))}
         try:
-            page = fetcher.get(src["url"], src.get("encoding") or None)
-            items = radar.parse_html_list(page, src, src.get("base") or src["url"])
+            if src.get("url_template") and src.get("keywords"):
+                items = radar.fetch_template_source(src, fetcher)
+                page_len = 0
+            else:
+                page = fetcher.get(src["url"], src.get("encoding") or None)
+                page_len = len(page)
+                items = radar.parse_html_list(page, src, src.get("base") or src["url"])
             hits = [i for i in items if any(k in i["title"] for k in PROBE_TENDER_KW)]
             dated = [i for i in items if i.get("date")]
-            rec.update({"ok": True, "bytes": len(page), "items": len(items),
+            rec.update({"ok": True, "bytes": page_len, "items": len(items),
                         "tender_hits": len(hits), "dated": len(dated),
                         "samples": [i["title"] for i in (hits or items)[:3]],
                         "sample_urls": [i["url"] for i in (hits or items)[:1]]})
             flag = "✅" if hits else ("△" if items else "○")
-            log(f"  {flag} {rec['name']:<26s} {len(page):>8d}字节  条目{len(items):>4d}  含招标{len(hits):>4d}")
+            log(f"  {flag} {rec['name']:<26s} {page_len:>8d}字节  条目{len(items):>4d}  含招标{len(hits):>4d}")
         except Exception as e:  # noqa: BLE001
             rec.update({"ok": False, "error": str(e)[:180], "items": 0, "tender_hits": 0})
             log(f"  ✗ {rec['name']:<26s} 失败: {str(e)[:70]}")

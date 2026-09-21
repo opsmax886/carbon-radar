@@ -456,6 +456,12 @@ def collect(cfg_sources: dict, force_all: bool = False) -> tuple[list[dict], lis
                     log(f"  ✓ {src.get('name', sid):<28s} 抓到 {len(items):3d} 条")
                 else:
                     log(f"  · {src.get('name', sid):<28s} 暂无链接")
+            elif src.get("url_template") and src.get("keywords"):
+                # 按关键词模板逐个请求的站点(如中国政府采购网)
+                items = fetch_template_source(src, fetcher)
+                # 每个关键词各自限流,这里再做一个总量上限,避免条数失控
+                cap = int(src.get("total_max") or global_limit or 100)
+                items = items[:cap]
             else:
                 if src.get("adapter") == "json_api":
                     items = fetch_json_api(src, fetcher)
@@ -483,6 +489,41 @@ def collect(cfg_sources: dict, force_all: bool = False) -> tuple[list[dict], lis
 
     save_health(health)
     return rows, report
+
+
+def fetch_template_source(src: dict, fetcher: "Fetcher") -> list[dict]:
+    """按关键词模板逐个请求。
+
+    有些站点(如中国政府采购网)必须"一个关键词一次请求"才能搜到,
+    所以在配置里写 url_template + keywords,由这里循环调用:
+      url_template: "https://search.ccgp.gov.cn/bxsearch?...&kw={kw}&..."
+      keywords: [碳核查, 温室气体, 碳足迹]
+    关键词会自动 URL 编码,你直接写中文即可。
+    """
+    tpl = src.get("url_template") or ""
+    kws = src.get("keywords") or []
+    if not tpl or not kws:
+        return []
+    old_delay = fetcher.delay
+    if src.get("request_delay"):
+        fetcher.delay = float(src["request_delay"])   # 该类站点要放慢,避免被封
+    items: list[dict] = []
+    try:
+        for kw in kws:
+            url = tpl.replace("{kw}", urllib.parse.quote(str(kw)))
+            try:
+                page = fetcher.get(url, src.get("encoding"))
+                got = parse_html_list(page, src, src.get("base") or url)
+                for g in got:
+                    g["matched_kw"] = str(kw)
+                items.extend(got)
+                log(f"    · 关键词「{kw}」→ {len(got)} 条")
+            except Exception as e:  # noqa: BLE001
+                log(f"    ! 关键词「{kw}」失败: {str(e)[:60]}")
+    finally:
+        fetcher.delay = old_delay
+    return items
+
 
 
 def parse_rss(page: str, source: dict) -> list[dict]:

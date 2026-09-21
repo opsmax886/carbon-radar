@@ -24,11 +24,11 @@
     "newest_item_date": "2026-09-21"
   },
   "mee_climate": {
-    "consecutive_failures": 1,
+    "consecutive_failures": 0,
     "last_attempt": "2026-09-21",
     "last_success": "2026-09-21",
     "last_count": 17,
-    "last_error": "抓取失败: <urlopen error EOF occurred in violation of protocol (_ssl.c:1129)>",
+    "last_error": null,
     "newest_item_date": "2026-09-20"
   },
   "mee_wsq": {
@@ -94,5 +94,18 @@
     "last_count": 1,
     "last_error": null,
     "newest_item_date": "2026-09-21"
+  },
+  "ccgp_keywords": {
+    "consecutive_failures": 0,
+    "last_attempt": "2026-09-21",
+    "last_success": "2026-09-21",
+    "last_count": 89,
+    "last_error": null,
+    "newest_item_date": "2026-09-20"
+  },
+  "bj_ccgp": {
+    "consecutive_failures": 2,
+    "last_attempt": "2026-09-21",
+    "last_error": "请求失败: HTTP Error 502: Bad Gateway"
   }
 }
