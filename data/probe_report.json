@@ -1,0 +1,584 @@
+{
+ "generated_at": "2026-09-21 16:39",
+ "results": [
+  {
+   "id": "tanpaifang_tanpancha",
+   "name": "碳排放交易网·碳盘查",
+   "url": "http://www.tanpaifang.com/tanpancha/",
+   "enabled": true,
+   "ok": true,
+   "bytes": 20540,
+   "items": 16,
+   "tender_hits": 6,
+   "dated": 16,
+   "samples": [
+    "北京首都国际机场股份有限公司能源审计及温室气体排放管理提升服务项目询比",
+    "邢台市大气污染物与温室气体融合排放清单编制项目公开招标中标公告",
+    "采购预算31万元！宜宾市生态环境局宜宾市2025—2027年度温室气体清单编制项目"
+   ],
+   "sample_urls": [
+    "http://www.tanpaifang.com/tanpancha/2026/0724/119623.html"
+   ]
+  },
+  {
+   "id": "tanpaifang_tanjiaoyi",
+   "name": "碳排放交易网·碳交易",
+   "url": "http://www.tanpaifang.com/tanjiaoyi/",
+   "enabled": true,
+   "ok": true,
+   "bytes": 20568,
+   "items": 15,
+   "tender_hits": 3,
+   "dated": 15,
+   "samples": [
+    "2025年碳配额成交量创新高，全国碳市场扩",
+    "中国碳市场累计成交量已近10亿吨 为国际",
+    "全国碳排放权成交额突破629亿元 覆盖范围"
+   ],
+   "sample_urls": [
+    "http://www.tanpaifang.com/tanjiaoyi/2026/0916/121081.html"
+   ]
+  },
+  {
+   "id": "tanpaifang_tanjinrong",
+   "name": "碳排放交易网·碳金融",
+   "url": "http://www.tanpaifang.com/tanjinrong/",
+   "enabled": true,
+   "ok": true,
+   "bytes": 20384,
+   "items": 16,
+   "tender_hits": 0,
+   "dated": 16,
+   "samples": [
+    "金融机构如何“接轨”碳市场？",
+    "企业降碳效果越好，贷款成本越低？四川首笔“电碳能效贷”落地乐山",
+    "绿色金融精准赋能碳减排"
+   ],
+   "sample_urls": [
+    "http://www.tanpaifang.com/tanjinrong/2026/0921/121200.html"
+   ]
+  },
+  {
+   "id": "ideacarbon_tender",
+   "name": "全国碳市场信息网·行业招标",
+   "url": "http://www.ideacarbon.org/header_tab/33/?pc=pc",
+   "enabled": false,
+   "ok": true,
+   "bytes": 48945,
+   "items": 10,
+   "tender_hits": 10,
+   "dated": 0,
+   "samples": [
+    "Ideacarbon碳市场每日碳招标（20220909） 摘要： 碳道小編 1473天前",
+    "Ideacarbon碳市场每日碳招标（20220906） 摘要： 碳道小編 1476天前",
+    "Ideacarbon碳市场每日碳招标（20220905） 摘要： 碳道小編 1477天前"
+   ],
+   "sample_urls": [
+    "http://www.ideacarbon.org/news_free/58136/?pc=pc"
+   ]
+  },
+  {
+   "id": "hebei_ggzy",
+   "name": "湖北省公共资源交易中心",
+   "url": "http://www.hbggzyfwpt.cn/",
+   "enabled": false,
+   "ok": true,
+   "bytes": 126500,
+   "items": 0,
+   "tender_hits": 0,
+   "dated": 0,
+   "samples": [],
+   "sample_urls": []
+  },
+  {
+   "id": "ccgp",
+   "name": "中国政府采购网",
+   "url": "https://search.ccgp.gov.cn/bxsearch",
+   "enabled": false,
+   "ok": true,
+   "bytes": 48481,
+   "items": 21,
+   "tender_hits": 20,
+   "dated": 20,
+   "samples": [
+    "中南大学湘雅三医院瓦里安高低能直线加速器整机维保公开招标公告",
+    "北京师范大学昌平校园F区1号食堂、5号学生宿舍楼、6号学生宿舍楼项目、2号食堂、7号学生宿舍楼-9号学生宿舍楼项目多测合一服务成交公告",
+    "中国地质大学（北京）地质工科人才培养能力提升（设备更新）项目——MIMO地基SAR雷达系统公开招标公告"
+   ],
+   "sample_urls": [
+    "http://www.ccgp.gov.cn/cggg/zygg/gkzb/202609/t20260921_27371551.htm"
+   ]
+  },
+  {
+   "id": "mee_climate",
+   "name": "生态环境部·应对气候变化司",
+   "url": "https://www.mee.gov.cn/ywgz/ydqhbh/",
+   "enabled": true,
+   "ok": true,
+   "bytes": 48399,
+   "items": 17,
+   "tender_hits": 0,
+   "dated": 17,
+   "samples": [
+    "生态环境部发布《全国碳市场发展报告（2026）》",
+    "《产品碳足迹管理体系建设进展报告（2026）》",
+    "生态环境部发布2026年“全国低碳日”主题宣传片"
+   ],
+   "sample_urls": [
+    "https://www.mee.gov.cn/ywgz/ydqhbh/wsqtkz/202609/t20260920_1166890.shtml"
+   ]
+  },
+  {
+   "id": "mee_wsq",
+   "name": "生态环境部·温室气体控制",
+   "url": "https://www.mee.gov.cn/ywgz/ydqhbh/wsqtkz/",
+   "enabled": true,
+   "ok": true,
+   "bytes": 40871,
+   "items": 6,
+   "tender_hits": 0,
+   "dated": 6,
+   "samples": [
+    "生态环境部发布《全国碳市场发展报告（2026）》",
+    "《产品碳足迹管理体系建设进展报告（2026）》",
+    "生态环境部发布2026年“全国低碳日”主题宣传片"
+   ],
+   "sample_urls": [
+    "https://www.mee.gov.cn/ywgz/ydqhbh/wsqtkz/202609/t20260920_1166890.shtml"
+   ]
+  },
+  {
+   "id": "mee_zbfb",
+   "name": "生态环境部·新闻发布会",
+   "url": "https://www.mee.gov.cn/ywdt/zbft/",
+   "enabled": true,
+   "ok": true,
+   "bytes": 40638,
+   "items": 15,
+   "tender_hits": 0,
+   "dated": 15,
+   "samples": [
+    "生态环境部环评司有关负责人就《排污许可证申请与核发技术规范 火电》等六项国家生态环境标准修订答记者问",
+    "生态环境部科技与财务司有关负责人就《关于推动生态环境领域科技创新多元化投入的指导意见》答记者问",
+    "生态环境部辐射源安全监管司有关负责人就《生态环境影响评价技术导则 核技术利用项目退役》（HJ 1479-2026）相关问题答记者问"
+   ],
+   "sample_urls": [
+    "https://www.mee.gov.cn/ywdt/zbft/202609/t20260903_1165073.shtml"
+   ]
+  },
+  {
+   "id": "gov_policy",
+   "name": "中国政府网·政策",
+   "url": "https://www.gov.cn/zhengce/",
+   "enabled": true,
+   "ok": true,
+   "bytes": 36539,
+   "items": 20,
+   "tender_hits": 0,
+   "dated": 14,
+   "samples": [
+    "中共中央办公厅 国务院办公厅印发《关于分类推进高校改革的意见》",
+    "国务院办公厅转发文化和旅游部等部门《关于促进房车消费的若干措施》的通知",
+    "国务院办公厅关于进一步加强烟花爆竹全链条安全监管的意见"
+   ],
+   "sample_urls": [
+    "https://www.gov.cn/202609/content_7081587.htm"
+   ]
+  },
+  {
+   "id": "ndrc",
+   "name": "国家发展改革委",
+   "url": "https://www.ndrc.gov.cn/xwdt/",
+   "enabled": true,
+   "ok": true,
+   "bytes": 12110,
+   "items": 25,
+   "tender_hits": 2,
+   "dated": 25,
+   "samples": [
+    "国家发展改革委发展战略和规划司研究课题入选公告",
+    "国家发展改革委发展战略和规划司研究课题征集公告"
+   ],
+   "sample_urls": [
+    "https://www.ndrc.gov.cn/tzgg/202609/t20260914_1407622.html"
+   ]
+  },
+  {
+   "id": "cbeex",
+   "name": "北京绿色交易所",
+   "url": "https://www.cbeex.com.cn/",
+   "enabled": false,
+   "ok": true,
+   "bytes": 32889,
+   "items": 0,
+   "tender_hits": 0,
+   "dated": 0,
+   "samples": [],
+   "sample_urls": []
+  },
+  {
+   "id": "greenfinance",
+   "name": "中国金融学会绿色金融专业委员会",
+   "url": "http://www.greenfinance.org.cn/",
+   "enabled": true,
+   "ok": true,
+   "bytes": 21699,
+   "items": 30,
+   "tender_hits": 0,
+   "dated": 13,
+   "samples": [
+    "NGFS《环境风险分析方...",
+    "自然资本估值工具",
+    "首个绿色金融专业委员会11成立"
+   ],
+   "sample_urls": [
+    "http://www.greenfinance.org.cn/more.php?cid=87"
+   ]
+  },
+  {
+   "id": "bjx_carbon",
+   "name": "北极星电力网·碳",
+   "url": "https://news.bjx.com.cn/tan/",
+   "enabled": false,
+   "ok": true,
+   "bytes": 15885,
+   "items": 0,
+   "tender_hits": 0,
+   "dated": 0,
+   "samples": [],
+   "sample_urls": []
+  },
+  {
+   "id": "tanjiaoyi_com",
+   "name": "中国碳交易网",
+   "url": "http://www.tanjiaoyi.com/",
+   "enabled": true,
+   "ok": true,
+   "bytes": 63945,
+   "items": 25,
+   "tender_hits": 1,
+   "dated": 12,
+   "samples": [
+    "全国碳市场启动交易近百日 总成交额超8亿元"
+   ],
+   "sample_urls": [
+    "http://www.tanjiaoyi.com/article-35124-1.html"
+   ]
+  },
+  {
+   "id": "mee_methodology",
+   "name": "生态环境部·方法学与标准",
+   "url": "https://www.mee.gov.cn/ywgz/ydqhbh/wsqtkz/",
+   "enabled": true,
+   "ok": true,
+   "bytes": 40871,
+   "items": 6,
+   "tender_hits": 0,
+   "dated": 6,
+   "samples": [
+    "生态环境部发布《全国碳市场发展报告（2026）》",
+    "《产品碳足迹管理体系建设进展报告（2026）》",
+    "生态环境部发布2026年“全国低碳日”主题宣传片"
+   ],
+   "sample_urls": [
+    "https://www.mee.gov.cn/ywgz/ydqhbh/wsqtkz/202609/t20260920_1166890.shtml"
+   ]
+  },
+  {
+   "id": "gz_ccgp",
+   "name": "贵州政府采购网",
+   "url": "http://www.ccgp-guizhou.gov.cn/",
+   "enabled": false,
+   "ok": true,
+   "bytes": 98264,
+   "items": 0,
+   "tender_hits": 0,
+   "dated": 0,
+   "samples": [],
+   "sample_urls": []
+  },
+  {
+   "id": "gz_ggzy",
+   "name": "贵州公共资源交易",
+   "url": "https://ggzy.guizhou.gov.cn/",
+   "enabled": false,
+   "ok": false,
+   "error": "抓取失败: <urlopen error [Errno 101] Network is unreachable>",
+   "items": 0,
+   "tender_hits": 0
+  },
+  {
+   "id": "zj_zcy",
+   "name": "浙江政采云",
+   "url": "https://zfcg.czt.zj.gov.cn/",
+   "enabled": false,
+   "ok": true,
+   "bytes": 95724,
+   "items": 0,
+   "tender_hits": 0,
+   "dated": 0,
+   "samples": [],
+   "sample_urls": []
+  },
+  {
+   "id": "he_ccgp",
+   "name": "河北政府采购网",
+   "url": "http://www.ccgp-hebei.gov.cn/",
+   "enabled": false,
+   "ok": false,
+   "error": "抓取失败: HTTP Error 403: Forbidden",
+   "items": 0,
+   "tender_hits": 0
+  },
+  {
+   "id": "he_ggzy",
+   "name": "河北公共资源交易",
+   "url": "http://ggzy.hebei.gov.cn/",
+   "enabled": false,
+   "ok": false,
+   "error": "抓取失败: <urlopen error [Errno -2] Name or service not known>",
+   "items": 0,
+   "tender_hits": 0
+  },
+  {
+   "id": "ln_ccgp",
+   "name": "辽宁政府采购网",
+   "url": "http://www.ccgp-liaoning.gov.cn/",
+   "enabled": false,
+   "ok": false,
+   "error": "抓取失败: <urlopen error [Errno 101] Network is unreachable>",
+   "items": 0,
+   "tender_hits": 0
+  },
+  {
+   "id": "ln_ggzy",
+   "name": "辽宁公共资源交易",
+   "url": "https://www.lnsggzy.com/",
+   "enabled": false,
+   "ok": false,
+   "error": "抓取失败: <urlopen error timed out>",
+   "items": 0,
+   "tender_hits": 0
+  },
+  {
+   "id": "jl_ccgp",
+   "name": "吉林政府采购网",
+   "url": "http://www.ccgp-jilin.gov.cn/",
+   "enabled": false,
+   "ok": false,
+   "error": "抓取失败: HTTP Error 405: Not Allowed",
+   "items": 0,
+   "tender_hits": 0
+  },
+  {
+   "id": "jl_ggzy",
+   "name": "吉林公共资源交易",
+   "url": "http://www.jlggzy.gov.cn/",
+   "enabled": false,
+   "ok": false,
+   "error": "抓取失败: <urlopen error [Errno -2] Name or service not known>",
+   "items": 0,
+   "tender_hits": 0
+  },
+  {
+   "id": "hlj_ccgp",
+   "name": "黑龙江政府采购网",
+   "url": "https://www.ccgp-helongjiang.gov.cn/",
+   "enabled": false,
+   "ok": false,
+   "error": "抓取失败: <urlopen error [Errno -2] Name or service not known>",
+   "items": 0,
+   "tender_hits": 0
+  },
+  {
+   "id": "hlj_ggzy",
+   "name": "黑龙江公共资源交易",
+   "url": "https://ggzyjyw.hlj.gov.cn/",
+   "enabled": false,
+   "ok": false,
+   "error": "抓取失败: <urlopen error [Errno 101] Network is unreachable>",
+   "items": 0,
+   "tender_hits": 0
+  },
+  {
+   "id": "sx_ccgp",
+   "name": "山西政府采购网",
+   "url": "http://www.ccgp-shanxi.gov.cn/",
+   "enabled": false,
+   "ok": false,
+   "error": "抓取失败: <urlopen error timed out>",
+   "items": 0,
+   "tender_hits": 0
+  },
+  {
+   "id": "sx_ggzy",
+   "name": "山西公共资源交易",
+   "url": "http://www.sxggzy.cn/",
+   "enabled": false,
+   "ok": false,
+   "error": "抓取失败: <urlopen error timed out>",
+   "items": 0,
+   "tender_hits": 0
+  },
+  {
+   "id": "ty_ggzy",
+   "name": "太原公共资源交易",
+   "url": "http://ggzy.xzspglj.taiyuan.gov.cn/",
+   "enabled": false,
+   "ok": false,
+   "error": "抓取失败: <urlopen error timed out>",
+   "items": 0,
+   "tender_hits": 0
+  },
+  {
+   "id": "hi_ccgp",
+   "name": "海南政府采购网",
+   "url": "https://www.ccgp-hainan.gov.cn/",
+   "enabled": false,
+   "ok": true,
+   "bytes": 3374,
+   "items": 0,
+   "tender_hits": 0,
+   "dated": 0,
+   "samples": [],
+   "sample_urls": []
+  },
+  {
+   "id": "hi_ggzy",
+   "name": "海南公共资源交易",
+   "url": "https://zw.hainan.gov.cn/ggzy/",
+   "enabled": false,
+   "ok": false,
+   "error": "抓取失败: The read operation timed out",
+   "items": 0,
+   "tender_hits": 0
+  },
+  {
+   "id": "hn_ccgp",
+   "name": "湖南政府采购网",
+   "url": "http://www.ccgp-hunan.gov.cn/",
+   "enabled": false,
+   "ok": true,
+   "bytes": 169685,
+   "items": 0,
+   "tender_hits": 0,
+   "dated": 0,
+   "samples": [],
+   "sample_urls": []
+  },
+  {
+   "id": "hn_ggzy",
+   "name": "湖南公共资源交易",
+   "url": "https://ggzy.hunan.gov.cn/",
+   "enabled": false,
+   "ok": false,
+   "error": "抓取失败: <urlopen error [SSL: BAD_ECPOINT] bad ecpoint (_ssl.c:1016)>",
+   "items": 0,
+   "tender_hits": 0
+  },
+  {
+   "id": "hb_ccgp",
+   "name": "湖北政府采购网",
+   "url": "http://www.ccgp-hubei.gov.cn/",
+   "enabled": false,
+   "ok": false,
+   "error": "抓取失败: <urlopen error [Errno 101] Network is unreachable>",
+   "items": 0,
+   "tender_hits": 0
+  },
+  {
+   "id": "hb_ggzy",
+   "name": "湖北公共资源交易",
+   "url": "http://www.hbggzyfwpt.cn/",
+   "enabled": false,
+   "ok": true,
+   "bytes": 126532,
+   "items": 13,
+   "tender_hits": 0,
+   "dated": 9,
+   "samples": [
+    "2023年度省综合专家库评标专家继续教育培训系统使用指南",
+    "--> 团风县棉织厂工业茶馆改造项目EPC总承包(...",
+    "--> 罗田县天堂水库除险加固工程施工标段(HBL..."
+   ],
+   "sample_urls": [
+    "https://www.hbggzyfwpt.cn/zxpx/tzxxDetail?guid=295f028b-821c-4de6-ac0a-612dd0a6bc53"
+   ]
+  },
+  {
+   "id": "sh_ccgp",
+   "name": "上海政府采购网",
+   "url": "http://www.zfcg.sh.gov.cn/",
+   "enabled": false,
+   "ok": true,
+   "bytes": 120046,
+   "items": 0,
+   "tender_hits": 0,
+   "dated": 0,
+   "samples": [],
+   "sample_urls": []
+  },
+  {
+   "id": "sh_ggzy",
+   "name": "上海公共资源交易",
+   "url": "https://www.shggzy.com/",
+   "enabled": false,
+   "ok": false,
+   "error": "抓取失败: HTTP Error 420: ",
+   "items": 0,
+   "tender_hits": 0
+  },
+  {
+   "id": "bj_ccgp",
+   "name": "北京政府采购网",
+   "url": "http://www.ccgp-beijing.gov.cn/",
+   "enabled": false,
+   "ok": true,
+   "bytes": 82043,
+   "items": 149,
+   "tender_hits": 70,
+   "dated": 0,
+   "samples": [
+    "《北京市财政局关于转发财政部在政府采购中...",
+    "北京市财政局关于转发财政部在政府采购中实...",
+    "北京市财政局关于公开征求《北京市政府采购..."
+   ],
+   "sample_urls": [
+    "http://www.ccgp-beijing.gov.cn/zhxx/zytz/2026/3/81e411698bbe44a3b240928bc0c03433.htm"
+   ]
+  },
+  {
+   "id": "bj_ggzy",
+   "name": "北京公共资源交易",
+   "url": "https://ggzyfw.beijing.gov.cn/",
+   "enabled": false,
+   "ok": false,
+   "error": "抓取失败: <urlopen error [SSL: BAD_ECPOINT] bad ecpoint (_ssl.c:1016)>",
+   "items": 0,
+   "tender_hits": 0
+  },
+  {
+   "id": "nm_ccgp",
+   "name": "内蒙古政府采购网",
+   "url": "https://www.ccgp-neimenggu.gov.cn/",
+   "enabled": false,
+   "ok": true,
+   "bytes": 2904,
+   "items": 0,
+   "tender_hits": 0,
+   "dated": 0,
+   "samples": [],
+   "sample_urls": []
+  },
+  {
+   "id": "nm_ggzy",
+   "name": "内蒙古公共资源交易",
+   "url": "http://ggzyjy.nmg.gov.cn/",
+   "enabled": false,
+   "ok": false,
+   "error": "抓取失败: <urlopen error [Errno 101] Network is unreachable>",
+   "items": 0,
+   "tender_hits": 0
+  }
+ ]
+}
