@@ -44,8 +44,8 @@
    "track_label": "碳市场 / 碳交易",
    "matched": [
     "全国碳市场",
-    "碳市场",
-    "碳配额"
+    "碳配额",
+    "碳市场"
    ],
    "signals": [],
    "region": "全国",
@@ -212,6 +212,35 @@
    "first_seen": "2026-09-21"
   },
   {
+   "title": "银行券商要进碳市场：履约季“潮汐交易”或",
+   "url": "http://www.tanjiaoyi.com/article-111251-1.html",
+   "date": null,
+   "source_id": "tanjiaoyi_com",
+   "source_name": "中国碳交易网",
+   "kind": "news",
+   "source_status": "实测可用",
+   "score": 50,
+   "track": "carbon_market",
+   "track_label": "碳市场 / 碳交易",
+   "matched": [
+    "碳市场",
+    "履约"
+   ],
+   "signals": [],
+   "region": "未分类",
+   "locality": "",
+   "category": "news",
+   "_dated": 0,
+   "also_on": [],
+   "summary": "银行券商要进碳市场：履约季“潮汐交易”或",
+   "match": 50,
+   "reason": "碳市场 / 碳交易",
+   "ai": false,
+   "is_new": true,
+   "is_fresh": true,
+   "first_seen": "2026-09-21"
+  },
+  {
    "title": "《产品碳足迹管理体系建设进展报告（2026）》",
    "url": "https://www.mee.gov.cn/ywgz/ydqhbh/wsqtkz/202606/t20260617_1159517.shtml",
    "date": "2026-06-17",
@@ -352,8 +381,7 @@
    "_dated": 1,
    "also_on": [
     "生态环境部·温室气体控制",
-    "生态环境部·方法学与标准",
-    "中国碳交易网"
+    "生态环境部·方法学与标准"
    ],
    "summary": "生态环境部发布《全国碳市场发展报告（2026）》",
    "match": 50,
@@ -419,6 +447,34 @@
    "ai": false,
    "is_new": true,
    "is_fresh": false,
+   "first_seen": "2026-09-21"
+  },
+  {
+   "title": "中铁也下场做“碳管家”：源网荷储+碳盘查",
+   "url": "http://www.tanjiaoyi.com/article-111246-1.html",
+   "date": "2026-09-21",
+   "source_id": "tanjiaoyi_com",
+   "source_name": "中国碳交易网",
+   "kind": "news",
+   "source_status": "实测可用",
+   "score": 29,
+   "track": "carbon_verification",
+   "track_label": "碳核查 / 温室气体排放核查",
+   "matched": [
+    "碳盘查"
+   ],
+   "signals": [],
+   "region": "未分类",
+   "locality": "",
+   "category": "news",
+   "_dated": 1,
+   "also_on": [],
+   "summary": "中铁也下场做“碳管家”：源网荷储+碳盘查",
+   "match": 29,
+   "reason": "碳核查 / 温室气体排放核查",
+   "ai": false,
+   "is_new": true,
+   "is_fresh": true,
    "first_seen": "2026-09-21"
   },
   {
@@ -703,34 +759,6 @@
    "first_seen": "2026-09-21"
   },
   {
-   "title": "ESG不是写报告，是“投资于人”：中智股份",
-   "url": "http://www.tanjiaoyi.com/article-111242-1.html",
-   "date": null,
-   "source_id": "tanjiaoyi_com",
-   "source_name": "中国碳交易网",
-   "kind": "news",
-   "source_status": "实测可用",
-   "score": 25,
-   "track": "green_finance",
-   "track_label": "绿色金融 / ESG",
-   "matched": [
-    "ESG"
-   ],
-   "signals": [],
-   "region": "未分类",
-   "locality": "",
-   "category": "news",
-   "_dated": 0,
-   "also_on": [],
-   "summary": "ESG不是写报告，是“投资于人”：中智股份",
-   "match": 25,
-   "reason": "绿色金融 / ESG",
-   "ai": false,
-   "is_new": true,
-   "is_fresh": false,
-   "first_seen": "2026-09-21"
-  },
-  {
    "title": "绿色低碳转型产业指导目录（2024年版）",
    "url": "http://www.tanjiaoyi.com/article-64248-1.html",
    "date": null,
@@ -753,63 +781,6 @@
    "summary": "绿色低碳转型产业指导目录（2024年版）",
    "match": 25,
    "reason": "碳中和规划 / 零碳园区",
-   "ai": false,
-   "is_new": true,
-   "is_fresh": false,
-   "first_seen": "2026-09-21"
-  },
-  {
-   "title": "林权抵押、碳汇质押、EOD 造血：绿色金融不",
-   "url": "http://www.tanjiaoyi.com/article-111195-1.html",
-   "date": null,
-   "source_id": "tanjiaoyi_com",
-   "source_name": "中国碳交易网",
-   "kind": "news",
-   "source_status": "实测可用",
-   "score": 25,
-   "track": "ccer",
-   "track_label": "CCER / 自愿减排项目",
-   "matched": [
-    "绿色金融",
-    "碳汇"
-   ],
-   "signals": [],
-   "region": "未分类",
-   "locality": "",
-   "category": "news",
-   "_dated": 0,
-   "also_on": [],
-   "summary": "林权抵押、碳汇质押、EOD 造血：绿色金融不",
-   "match": 25,
-   "reason": "CCER / 自愿减排项目",
-   "ai": false,
-   "is_new": true,
-   "is_fresh": false,
-   "first_seen": "2026-09-21"
-  },
-  {
-   "title": "碳资产也能回购融资：上海清算所让钢厂配额",
-   "url": "http://www.tanjiaoyi.com/article-111132-1.html",
-   "date": null,
-   "source_id": "tanjiaoyi_com",
-   "source_name": "中国碳交易网",
-   "kind": "news",
-   "source_status": "实测可用",
-   "score": 25,
-   "track": "carbon_market",
-   "track_label": "碳市场 / 碳交易",
-   "matched": [
-    "碳资产"
-   ],
-   "signals": [],
-   "region": "上海",
-   "locality": "",
-   "category": "news",
-   "_dated": 0,
-   "also_on": [],
-   "summary": "碳资产也能回购融资：上海清算所让钢厂配额",
-   "match": 25,
-   "reason": "碳市场 / 碳交易",
    "ai": false,
    "is_new": true,
    "is_fresh": false,
@@ -1348,5 +1319,5 @@
    "first_seen": "2026-09-21"
   }
  ],
- "generated_at": "2026-09-21T13:26:54.527697+08:00"
+ "generated_at": "2026-09-21T14:20:25.866073+08:00"
 }

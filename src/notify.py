@@ -30,6 +30,12 @@ def _http_post(url: str, payload: dict, timeout: int = 20) -> str:
 
 
 def _sign_dingtalk(url: str, secret: str) -> str:
+    # 防护:钉钉部分页面会直接给出"已经带签名"的完整地址。
+    # 如果地址里已经有 timestamp 和 sign,就不要再签一次,
+    # 否则会变成 ?...&timestamp=A&sign=B&timestamp=C&sign=D 导致推送失败。
+    if "timestamp=" in url and "sign=" in url:
+        print("  · 检测到 Webhook 已自带签名,跳过重复加签")
+        return url
     ts = str(round(time.time() * 1000))
     string_to_sign = f"{ts}\n{secret}"
     h = hmac.new(secret.encode("utf-8"), string_to_sign.encode("utf-8"), digestmod=hashlib.sha256).digest()
