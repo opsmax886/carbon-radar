@@ -61,6 +61,22 @@ def load_yaml(name: str) -> dict:
         return yaml.safe_load(f)
 
 
+def load_json_file(path: str, default):
+    if os.path.exists(path):
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except (json.JSONDecodeError, OSError):
+            pass
+    return default
+
+
+def save_json_file(path: str, obj) -> None:
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(obj, f, ensure_ascii=False, indent=1)
+
+
 # ---------------------------------------------------------------- 抓取层
 
 class Fetcher:
@@ -429,19 +445,28 @@ def collect(cfg_sources: dict, force_all: bool = False) -> tuple[list[dict], lis
         entry = health.setdefault(sid, {"consecutive_failures": 0})
         entry["last_attempt"] = today_str()
         try:
-            page = fetcher.get(src["url"], src.get("encoding"))
-            if src.get("adapter") == "rss":
-                items = parse_rss(page, src)
+            # 手动链接池是特殊源:不是单个列表页,而是读文件里的一批文章链接
+            if src.get("adapter") == "manual_links":
+                items = collect_manual_links(cfg_sources, fetcher)
+                if items:
+                    log(f"  ✓ {src.get('name', sid):<28s} 抓到 {len(items):3d} 条")
+                else:
+                    log(f"  · {src.get('name', sid):<28s} 暂无链接")
             else:
-                items = parse_html_list(page, src, src.get("base") or src["url"])
-            items = items[: global_limit or None]
+                page = fetcher.get(src["url"], src.get("encoding"))
+                if src.get("adapter") == "rss":
+                    items = parse_rss(page, src)
+                else:
+                    items = parse_html_list(page, src, src.get("base") or src["url"])
+                items = items[: global_limit or None]
             for it in items:
                 it["source_status"] = src.get("status", "")
             rows.extend(items)
             entry.update({"last_success": today_str(), "last_count": len(items),
                           "consecutive_failures": 0, "last_error": None,
                           "newest_item_date": max([i["date"] for i in items if i.get("date")], default=None)})
-            log(f"  ✓ {src.get('name', sid):<28s} 抓到 {len(items):3d} 条")
+            if src.get("adapter") != "manual_links":
+                log(f"  ✓ {src.get('name', sid):<28s} 抓到 {len(items):3d} 条")
         except Exception as e:  # noqa: BLE001
             entry["consecutive_failures"] = int(entry.get("consecutive_failures", 0)) + 1
             entry["last_error"] = str(e)[:200]
@@ -471,6 +496,144 @@ def parse_rss(page: str, source: dict) -> list[dict]:
             out.append({"title": title, "url": url, "date": date, "source_id": source["id"],
                         "source_name": source.get("name", source["id"]), "kind": source.get("kind", "news")})
     return out
+
+
+# ---------------------------------------------------------------- 手动链接池
+# 为什么需要它:微信公众号【只开放单篇文章页】,不开放任何文章列表接口。
+# 实测:profile_ext 返回 {"ret":-3,"errmsg":"no session"};album 接口返回 ret:10004;
+#      搜狗微信的搜索结果是会话绑定跳转 + JS 反爬,解不出真实链接。
+# 所以把链接贴进 config/manual_links.txt 是当下唯一稳定且免费的办法。
+
+MANUAL_CACHE_PATH = os.path.join(DATA_DIR, "manual_cache.json")
+VALID_KINDS = ("tender", "policy", "methodology", "news")
+TENDER_HINTS = ("招标", "中标", "采购", "成交", "询比", "询价", "竞争性磋商",
+                "竞争性谈判", "比选", "投标", "申报", "征集")
+METHOD_HINTS = ("方法学", "核算指南", "核算标准", "技术规范", "MRV")
+POLICY_HINTS = ("通知", "办法", "实施方案", "条例", "意见", "规划", "标准",
+                "指南", "政策", "印发", "公告")
+
+
+def _first(text: str, *pats):
+    for p in pats:
+        m = re.search(p, text, re.S | re.I)
+        if m:
+            v = html_mod.unescape(m.group(1)).strip()
+            if v:
+                return v
+    return None
+
+
+def _og(prop: str):
+    """匹配 <meta property="X" content="Y">,兼容属性顺序颠倒的情况。"""
+    p = re.escape(prop)
+    return (rf'<meta[^>]+property=["\']{p}["\'][^>]+content=["\']([^"\']*)["\']',
+            rf'<meta[^>]+content=["\']([^"\']*)["\'][^>]+property=["\']{p}["\']')
+
+
+def fetch_article_meta(url: str, fetcher: "Fetcher", encoding: str | None = None) -> dict:
+    """抓取单篇文章页,提取标题/来源/发布时间/正文片段。
+
+    微信公众号文章页是公开可读的(无需登录),这是"手动链接池"能成立的基础。
+    对普通网页也兼容(靠标准 og 标签)。
+    """
+    page = fetcher.get(url, encoding)
+    title = _first(page, *_og("og:title"),
+                   r'var\s+msg_title\s*=\s*["\'](.*?)["\']',
+                   r'<h1[^>]*class="rich_media_title"[^>]*>(.*?)</h1>',
+                   r"<title>(.*?)</title>")
+    source = _first(page, *_og("og:article:author"),
+                    r'var\s+nickname\s*=\s*["\'](.*?)["\']',
+                    r'id="js_name"[^>]*>(.*?)<',
+                    *_og("og:site_name"))
+    date = None
+    ct = _first(page, r'var\s+ct\s*=\s*"?(\d{10})"?', r'"publish_time"\s*:\s*"?(\d{10})')
+    if ct and ct.isdigit():
+        date = datetime.fromtimestamp(int(ct), CST).strftime("%Y-%m-%d")
+    if not date:
+        raw = _first(page, *_og("article:published_time"), *_og("og:release_date"))
+        if raw:
+            date = date_from_text(raw) or (raw[:10] if re.match(r"\d{4}-\d{2}-\d{2}", raw) else None)
+    if not date:
+        date = date_from_url(url)
+
+    snippet = _first(page, r'<div[^>]+class="rich_media_content[^"]*"[^>]*>(.*?)</div>',
+                     r'<div[^>]+id="js_content"[^>]*>(.*?)</div>')
+    if not snippet:
+        snippet = _first(page, *_og("og:description"),
+                         r'<meta[^>]+name="description"[^>]+content=["\']([^"\']*)["\']')
+    if snippet:
+        snippet = clean_text(snippet)[:1500]
+    return {"title": title, "source": source, "date": date, "snippet": snippet or ""}
+
+
+def guess_kind(text: str, default: str = "news") -> str:
+    """从标题+正文片段猜归类,猜不准就用默认值。"""
+    if any(h in text for h in METHOD_HINTS):
+        return "methodology"
+    if any(h in text for h in TENDER_HINTS):
+        return "tender"
+    if any(h in text for h in POLICY_HINTS):
+        return "policy"
+    return default
+
+
+def collect_manual_links(cfg_sources: dict, fetcher: "Fetcher") -> list[dict]:
+    """读取 config/manual_links.txt,逐条抓取文章元信息。
+
+    语法:一行一个链接,以 # 开头为注释;可在行尾加 #tender 等标签指定归类。
+    抓过的链接缓存在 data/manual_cache.json,不重复抓取(微信文章页有 3MB+,不必每天重抓)。
+    """
+    src = next((s for s in (cfg_sources.get("sources") or [])
+                if s.get("adapter") == "manual_links"), None)
+    if not src or not src.get("enabled"):
+        return []
+    path = os.path.join(ROOT, src.get("file", "config/manual_links.txt"))
+    if not os.path.exists(path):
+        log(f"  ! 找不到手动链接文件: {path}")
+        return []
+
+    with open(path, "r", encoding="utf-8") as f:
+        lines = f.read().splitlines()
+
+    cache = load_json_file(MANUAL_CACHE_PATH, {})
+    items: list[dict] = []
+    for raw_line in lines:
+        line = raw_line.strip()
+        if not line or line.startswith(("#", "//")):
+            continue
+        # tag 默认 None:只有用户显式写了 #tender 这类标签才覆盖自动识别,
+        # 否则裸链接会被默认值短路,永远归成 news。
+        tag, url = None, line
+        m = re.match(r"^(https?://\S+)\s*#(\w+)\s*$", line)
+        if m:
+            url, tag = m.group(1), m.group(2)
+        if not url.startswith("http"):
+            continue
+        try:
+            if url in cache and cache[url].get("title"):
+                meta = cache[url]
+            else:
+                meta = fetch_article_meta(url, fetcher, src.get("encoding"))
+                meta["fetched_at"] = today_str()
+                cache[url] = meta
+            if not meta.get("title"):
+                log(f"  ! 手动链接抓不到标题,已跳过: {url[:70]}")
+                continue
+            blob = f"{meta['title']} {meta.get('snippet', '')[:400]}"
+            kind = tag if tag in VALID_KINDS else guess_kind(blob, src.get("kind", "news"))
+            items.append({
+                "title": meta["title"],
+                "url": url,
+                "date": meta.get("date"),
+                "source_id": src["id"],
+                "source_name": meta.get("source") or src.get("name", "手动投稿"),
+                "kind": kind,
+                "summary": meta.get("snippet", "")[:400],
+            })
+        except Exception as e:  # noqa: BLE001
+            log(f"  ! 手动链接失败({str(e)[:50]}): {url[:60]}")
+    save_json_file(MANUAL_CACHE_PATH, cache)
+    return items
 
 
 def build(cfg_sources: dict, kw: dict, force_all: bool = False) -> dict:

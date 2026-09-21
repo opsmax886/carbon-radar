@@ -101,8 +101,13 @@ def enrich(items: list[dict], batch_size: int = 12, max_items: int = 80,
         lines = []
         for n, idx in enumerate(chunk):
             it = items[idx]
+            # 手动投稿(如微信公众号)带正文摘录,喂给模型能让摘要准确得多
+            extra = ""
+            snip = (it.get("summary") or "").strip()
+            if snip and not it["title"].startswith(snip[:20]):
+                extra = f'\n    正文摘录:{snip[:160]}'
             lines.append(f'[{n}] 标题:{it["title"]}\n    来源:{it.get("source_name","")} 日期:{it.get("date") or "未知"} '
-                         f'规则命中:{",".join(it.get("matched", [])[:5]) or "无"}')
+                         f'规则命中:{",".join(it.get("matched", [])[:5]) or "无"}{extra}')
         user = "请分析以下 %d 条信息:\n\n%s" % (len(chunk), "\n".join(lines))
         try:
             resp = _post({
