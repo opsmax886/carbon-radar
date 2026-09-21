@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-09-21 16:50",
+ "generated_at": "2026-09-21 16:54",
  "today": "2026-09-21",
  "days": [
   {
@@ -51,8 +51,8 @@
      "track": "carbon_verification",
      "track_label": "碳核查 / 温室气体排放核查",
      "matched": [
-      "温室气体清单",
       "排放清单编制",
+      "温室气体清单",
       "清单编制"
      ],
      "signals": [
@@ -117,8 +117,8 @@
      "track": "carbon_footprint",
      "track_label": "碳足迹 / 碳标签",
      "matched": [
-      "产品碳足迹",
       "碳足迹核算",
+      "产品碳足迹",
       "碳足迹"
      ],
      "signals": [
@@ -471,8 +471,8 @@
      "track_label": "碳市场 / 碳交易",
      "matched": [
       "全国碳市场",
-      "碳配额",
-      "碳市场"
+      "碳市场",
+      "碳配额"
      ],
      "signals": [],
      "region": "全国",
@@ -501,8 +501,8 @@
      "track": "neutrality",
      "track_label": "碳中和规划 / 零碳园区",
      "matched": [
-      "绿色低碳",
       "零碳园区",
+      "绿色低碳",
       "零碳"
      ],
      "signals": [],
@@ -627,8 +627,8 @@
      "track": "carbon_footprint",
      "track_label": "碳足迹 / 碳标签",
      "matched": [
-      "产品碳足迹",
       "碳足迹核算",
+      "产品碳足迹",
       "碳足迹"
      ],
      "signals": [
@@ -3604,7 +3604,7 @@
    "enabled": true,
    "status": "候选源 —— 待云端探测确认可用性",
    "note": "探测通过后,把 enabled 改成 true,并补上精确的 link_filter",
-   "consecutive_failures": 2,
+   "consecutive_failures": 3,
    "last_attempt": "2026-09-21",
    "last_error": "请求失败: HTTP Error 502: Bad Gateway"
   }
@@ -3617,7 +3617,8 @@
   "total": 114,
   "stale_sources": [
    "碳排放交易网·碳盘查(最新内容停在2026-07-24)",
-   "生态环境部·新闻发布会(最新内容停在2026-09-03)"
+   "生态环境部·新闻发布会(最新内容停在2026-09-03)",
+   "北京政府采购网(连续失败3次)"
   ],
   "sources_ok": 13,
   "tenders": 89,

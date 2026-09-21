@@ -104,7 +104,7 @@
     "newest_item_date": "2026-09-20"
   },
   "bj_ccgp": {
-    "consecutive_failures": 2,
+    "consecutive_failures": 3,
     "last_attempt": "2026-09-21",
     "last_error": "请求失败: HTTP Error 502: Bad Gateway"
   }

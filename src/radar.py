@@ -79,6 +79,32 @@ def save_json_file(path: str, obj) -> None:
 
 # ---------------------------------------------------------------- 抓取层
 
+_IPV4_PATCHED = False
+
+
+def _prefer_ipv4() -> None:
+    """让 DNS 解析优先返回 IPv4 地址。
+
+    为什么需要:部分政务站点只解析出 IPv6(AAAA 记录),而 GitHub Actions 的
+    runner 没有 IPv6 出口,于是报 "Network is unreachable" —— 源探测报告里
+    贵州/辽宁/黑龙江/湖北/内蒙古的公共资源交易平台都属于这一类。
+    优先取 A 记录即可绕过;取不到 IPv4 时仍回退原结果,不会弄坏别的站点。
+    """
+    global _IPV4_PATCHED
+    if _IPV4_PATCHED:
+        return
+    import socket as _socket
+    _orig = _socket.getaddrinfo
+
+    def _ipv4_first(*args, **kwargs):
+        res = _orig(*args, **kwargs)
+        v4 = [r for r in res if r[0] == _socket.AF_INET]
+        return v4 or res
+
+    _socket.getaddrinfo = _ipv4_first
+    _IPV4_PATCHED = True
+
+
 class Fetcher:
     """带限速与重试的抓取器。同一域名强制间隔,避免触发反爬。"""
 
@@ -93,6 +119,13 @@ class Fetcher:
         # 部分政务站点证书链不完整,放宽校验但仅用于只读公开页面
         self.ctx.check_hostname = False
         self.ctx.verify_mode = ssl.CERT_NONE
+        # 兼容性修复 1:优先 IPv4 —— 解决 runner 无 IPv6 出口导致的 "Network is unreachable"
+        _prefer_ipv4()
+        # 兼容性修复 2:指定常见椭圆曲线 —— 个别站点证书会触发 "SSL: BAD_ECPOINT"
+        try:
+            self.ctx.set_ecdh_curve("prime256v1")
+        except (AttributeError, ValueError, ssl.SSLError):
+            pass
 
     def _throttle(self, url: str) -> None:
         host = urllib.parse.urlparse(url).netloc
