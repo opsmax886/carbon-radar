@@ -171,11 +171,16 @@
   var CAT_LABEL = {tender:'招投标', policy:'政策', methodology:'方法学', news:'动态'};
 
   function boot(){
-    if(!DATA && !window.__NO_EMBED__){
+    // data.js 缺失/解析失败时,必须回退去 fetch data.json。
+    // 原来写成 `!DATA && !__NO_EMBED__`,而 onerror 恰好会把 __NO_EMBED__ 置 true,
+    // 导致条件为假 → 直接报"未能加载数据",尽管 data.json 就在旁边、完全可读。
+    if(!DATA){
       fetch('data.json').then(function(r){return r.json()}).then(function(j){
         DATA=j; initControls(); render();
       }).catch(showLoadError);
-    } else if(DATA){ render(); } else { showLoadError(); }
+    } else {
+      render();
+    }
   }
   function showLoadError(){
     document.getElementById('main').innerHTML =
@@ -296,6 +301,10 @@
     }
 
     var html = '';
+    if(st && st.ai_enabled && !st.ai_ok){
+      html += '<div class="notice">⚠️ <b>AI 摘要未生效</b>：DeepSeek 调用全部失败,'+
+              '当前摘要为规则兜底。请检查 API 余额或 Key。</div>';
+    }
     var stale = (st.stale_sources||[]);
     if(stale.length){
       html += '<div class="notice">⚠️ <b>数据源告警</b>：'+stale.join('；')+
@@ -353,8 +362,13 @@
     var srcs = DATA.sources||[];
     var on = srcs.filter(function(s){return s.enabled});
     var bad = on.filter(function(s){return (s.consecutive_failures||0)>0});
+    // 顺带把 AI 状态显示出来 —— AI 静默失效时摘要会退化成标题截断,
+    // 光看推送和页面是发现不了的
+    var ai = DATA.stats || {};
+    var aiTxt = '';
+    if(ai.ai_enabled) aiTxt = ai.ai_ok ? ' · AI 正常' : ' · ⚠️ AI 未生效';
     document.getElementById('htitle').textContent =
-      '数据源状态：'+on.length+' 个启用 · '+(bad.length? bad.length+' 个异常':'全部正常');
+      '数据源状态：'+on.length+' 个启用 · '+(bad.length? bad.length+' 个异常':'全部正常')+aiTxt;
     var html='';
     srcs.forEach(function(s){
       var cls = !s.enabled?'off' : (s.consecutive_failures>0?'bad':'ok');

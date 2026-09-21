@@ -79,19 +79,29 @@ def _fallback(item: dict) -> dict:
 
 
 def enrich(items: list[dict], batch_size: int = 12, max_items: int = 80,
-           min_score: int = 15) -> list[dict]:
+           min_score: int = 15) -> tuple[list[dict], dict]:
+    """返回 (增强后的条目, 统计信息)。
+
+    为什么要返回统计:AI 失败时原来只 print,整批静默退回规则兜底 ——
+    用户会以为 AI 一直在工作。上层需要拿到 ai_ok/ai_failed 才能在推送和
+    看板上明确告警(余额耗尽、key 失效、返回被截断都会走到这条路)。
+    """
     api_key = os.environ.get("DEEPSEEK_API_KEY", "").strip()
+    stats = {"ai_enabled": bool(api_key), "ai_ok": 0, "ai_failed": 0, "ai_skipped": 0}
     if not api_key:
         print("  · 未配置 DEEPSEEK_API_KEY,使用规则打分兜底(功能完全可用)")
+        stats["ai_skipped"] = len(items)
         return [{**it, **{k: v for k, v in _fallback(it).items() if k not in it or k in ("summary", "match", "reason", "ai")}}
-                for it in items]
+                for it in items], stats
 
     # 只对值得花 token 的条目调用 AI:按分数排序取前 max_items
     order = sorted(range(len(items)), key=lambda i: -items[i].get("score", 0))
     targets = [i for i in order if items[i].get("score", 0) >= min_score][:max_items]
     target_set = set(targets)
+    targetset_frozen = set(targets)
     print(f"  · AI 增强 {len(targets)}/{len(items)} 条(其余用规则兜底,控制成本)")
 
+    stats["ai_skipped"] = len(items) - len(targetset_frozen)
     for i, it in enumerate(items):
         if i not in target_set:
             items[i] = {**it, **_fallback(it)}
@@ -131,12 +141,17 @@ def enrich(items: list[dict], batch_size: int = 12, max_items: int = 80,
                                   "ai": True}
                 else:
                     items[idx] = {**items[idx], **_fallback(items[idx])}
+            stats["ai_ok"] += 1
             print(f"  · 已处理 {min(start + batch_size, len(targets))}/{len(targets)} 条")
         except Exception as e:  # noqa: BLE001
+            stats["ai_failed"] += 1
             print(f"  · AI 批次失败({str(e)[:70]}),该批改用规则兜底")
             for idx in chunk:
                 items[idx] = {**items[idx], **_fallback(items[idx])}
-    return items
+    if stats["ai_failed"]:
+        print(f"  ⚠ AI 有 {stats['ai_failed']} 个批次失败(成功 {stats['ai_ok']} 批),"
+              f"这些条目用了规则兜底 —— 请检查 DeepSeek 余额或 key")
+    return items, stats
 
 
 def build_digest(items: list[dict], top_n: int = 12) -> str:

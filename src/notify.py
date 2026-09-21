@@ -57,7 +57,8 @@ def build_markdown(items: list[dict], date_str: str, stats: dict, site_url: str 
     # 有推送窗口时写明是"近 N 天",否则你无法判断这条消息覆盖了多长时间。
     win = stats.get("push_window_days")
     scope = f"近 {win} 天" if win else "本次"
-    lines.append(f"> {scope}新增 **{stats.get('new', len(items))}** 条"
+    _cnt = stats.get("push_count", stats.get("new", len(items)))
+    lines.append(f"> {scope}新增 **{_cnt}** 条"
                  f"(标讯 {len(tenders)} · 政策/方法学 {len(policies)} · 动态 {len(news)})"
                  f" ｜ 库内累计 {stats.get('total', '-')} 条")
     lines.append("")
@@ -100,6 +101,13 @@ def build_markdown(items: list[dict], date_str: str, stats: dict, site_url: str 
     if not tenders and stats.get("tenders"):
         lines.append("")
         lines.append(f"> ℹ️ 本次没有新增标讯,但库内已有 **{stats['tenders']} 条标讯**,可在看板中查看。")
+
+    # AI 失效必须显式告警:否则摘要退化成"标题截断"、match 退化成规则分,
+    # 页面和钉钉都看着正常,用户会以为 AI 一直在工作。
+    if stats.get("ai_enabled") and not stats.get("ai_ok"):
+        lines.append("")
+        lines.append(f"> ⚠️ **AI 摘要未生效**(成功 0 批 / 失败 {stats.get('ai_failed', 0)} 批),"
+                     f"以下摘要为规则兜底。请检查 DeepSeek 余额或 API Key。")
 
     stale = stats.get("stale_sources") or []
     if stale:
@@ -156,17 +164,28 @@ def push_feishu(title: str, markdown: str) -> bool:
         return False
 
 
-def push_all(items: list[dict], date_str: str, stats: dict, site_url: str = "") -> None:
+def push_all(items: list[dict], date_str: str, stats: dict, site_url: str = "") -> bool:
+    """推送并返回"是否至少有一个渠道成功"。
+
+    原来忽略返回值,导致 webhook 失效时 Actions 依然全绿、钉钉彻底静默,
+    而这些条目已经被记为"推过了",再也不会补推。
+    """
     if not items:
-        push_heartbeat(date_str, stats, site_url)
-        return
+        return push_heartbeat(date_str, stats, site_url)
     title, md = build_markdown(items, date_str, stats, site_url)
-    push_dingtalk(title, md)
-    push_wecom(title, md)
-    push_feishu(title, md)
+    channels = ("DINGTALK_WEBHOOK", "WECOM_WEBHOOK", "FEISHU_WEBHOOK")
+    if not any(os.environ.get(k) for k in channels):
+        # 一个渠道都没配置 = 用户选择不推送,不算失败(本地调试时就是这样)
+        push_dingtalk(title, md)
+        return True
+    results = [push_dingtalk(title, md), push_wecom(title, md), push_feishu(title, md)]
+    ok = any(results)
+    if not ok:
+        print("  ✗ 所有推送渠道都失败了 —— 请检查 webhook / 加签密钥是否失效")
+    return ok
 
 
-def push_heartbeat(date_str: str, stats: dict, site_url: str = "") -> None:
+def push_heartbeat(date_str: str, stats: dict, site_url: str = "") -> bool:
     """当天无新增时发一条简短的平安消息。
 
     没有这条消息,你无法区分"今天确实没有新标讯"和"抓取脚本已经挂了很多天"。
@@ -174,8 +193,11 @@ def push_heartbeat(date_str: str, stats: dict, site_url: str = "") -> None:
     """
     online = stats.get("sources_ok")
     lines = [f"## 碳雷达 · {date_str}", "",
-             f"今日**无新增**信息(总库 {stats.get('total', '-')} 条)。",
-             f"系统运行正常" + (f",{online} 个数据源在线。" if online else "。")]
+             f"今日**无新增**信息(库内 {stats.get('total', '-')} 条)。",
+             f"抓取正常" + (f",{online} 个数据源有返回。" if online else "。")]
+    if stats.get("stale_sources"):
+        lines.append("")
+        lines.append(f"⚠️ 有 {len(stats['stale_sources'])} 个源异常,详见看板「数据源状态」。")
     stale = stats.get("stale_sources") or []
     if stale:
         lines.append("")
@@ -185,6 +207,12 @@ def push_heartbeat(date_str: str, stats: dict, site_url: str = "") -> None:
         lines.append(f"[👉 打开完整看板]({site_url})")
     title = f"碳雷达 · {date_str} 无新增"
     md = "\n".join(lines)
-    push_dingtalk(title, md)
-    push_wecom(title, md)
-    push_feishu(title, md)
+    channels = ("DINGTALK_WEBHOOK", "WECOM_WEBHOOK", "FEISHU_WEBHOOK")
+    if not any(os.environ.get(k) for k in channels):
+        # 一个渠道都没配置 = 用户选择不推送,不算失败(本地调试就是这样)
+        push_dingtalk(title, md)
+        return True
+    results = [push_dingtalk(title, md), push_wecom(title, md), push_feishu(title, md)]
+    if not any(results):
+        print("  ✗ 所有推送渠道都失败了 —— 请检查 webhook / 加签密钥是否失效")
+    return any(results)

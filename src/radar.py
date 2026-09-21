@@ -136,8 +136,10 @@ class Fetcher:
         self._last_hit[host] = time.time()
 
     def get(self, url: str, encoding: str | None = None) -> str:
+        # encoding 必须透传,否则配置里写的编码是死配置,遇到 GBK 站点会乱码
         return self.request(url, headers={
-            "Accept": "text/html,application/xhtml+xml,application/xml,*/*;q=0.8"})
+            "Accept": "text/html,application/xhtml+xml,application/xml,*/*;q=0.8"},
+            encoding=encoding)
 
     def request(self, url: str, method: str = "GET", headers: dict | None = None,
                 data: bytes | None = None, encoding: str | None = None) -> str:
@@ -193,8 +195,10 @@ def decode_body(raw: bytes, encoding: str | None, content_type: str) -> str:
     return best if best is not None else raw.decode("utf-8", errors="ignore")
 
 
-BLOCK_MARKERS = ["频繁访问", "访问过于频繁", "请开启JavaScript", "验证码", "安全验证",
-                 "请输入验证码", "您的访问", "request blocked", "Access Denied"]
+# 反爬拦截页的特征串。注意不要放"您的访问"这种太宽泛的词 ——
+# 政务站正文/页脚可能出现类似表述,会被误判为拦截页并白白重试 3 次。
+BLOCK_MARKERS = ["频繁访问", "访问过于频繁", "请开启JavaScript", "验证码",
+                 "安全验证", "请输入验证码", "request blocked", "Access Denied"]
 
 
 def is_blocked(text: str) -> bool:
@@ -212,13 +216,21 @@ DATE_PATTERNS = [
 ]
 
 
+def _valid_date(y, mo, d) -> str | None:
+    """真实日历校验。只查 1<=mo<=12、1<=d<=31 会放过 2026-02-31 这种假日期。"""
+    try:
+        return datetime(int(y), int(mo), int(d)).strftime("%Y-%m-%d")
+    except (ValueError, TypeError):
+        return None
+
+
 def date_from_url(url: str) -> str | None:
-    for pat, fmt in DATE_PATTERNS:
+    for pat, _fmt in DATE_PATTERNS:
         m = pat.search(url)
         if m:
-            y, mo, d = m.group(1), m.group(2), m.group(3)
-            if "1900" < y < "2100" and 1 <= int(mo) <= 12 and 1 <= int(d) <= 31:
-                return fmt.format(y, mo, d)
+            v = _valid_date(m.group(1), m.group(2), m.group(3))
+            if v:
+                return v
     return None
 
 
@@ -227,12 +239,7 @@ TEXT_DATE_RE = re.compile(r"(20\d{2})[-/年.](\d{1,2})[-/月.](\d{1,2})")
 
 def date_from_text(text: str) -> str | None:
     m = TEXT_DATE_RE.search(text)
-    if not m:
-        return None
-    y, mo, d = m.group(1), int(m.group(2)), int(m.group(3))
-    if 1 <= mo <= 12 and 1 <= d <= 31:
-        return f"{y}-{mo:02d}-{d:02d}"
-    return None
+    return _valid_date(m.group(1), m.group(2), m.group(3)) if m else None
 
 
 # ---------------------------------------------------------------- HTML 列表解析
@@ -411,19 +418,52 @@ def _simhash(text: str, bits: int = 64) -> int:
     return sum(1 << i for i in range(bits) if v[i] > 0)
 
 
+# 归一化时要剥掉的通用词。按长度倒序,先剥"公开招标公告"这类长组合。
+# 注意:必须在【任意位置】剥离,不能只剥尾部 ——
+# "…项目公开招标公告"只剥尾部"招标公告"会留下悬空的"公开",
+# 导致它与"…项目招标公告"归一化结果不同,去重照样失效(实测汉明距离 11)。
+_NORM_DROP = sorted({
+    "公开招标", "邀请招标", "竞争性磋商", "竞争性谈判", "单一来源",
+    "资格预审", "招标公告", "采购公告", "中标公告", "成交公告",
+    "结果公告", "更正公告", "变更公告", "废标公告", "流标公告",
+    "询价公告", "询比公告", "比选公告", "候选人公示", "结果公示",
+    "中标结果", "成交结果", "中标候选人", "采购项目", "服务项目",
+    "招标", "采购", "公告", "公示", "结果", "中标", "成交",
+    "候选人", "项目", "服务", "公开", "邀请", "二次", "重新",
+}, key=len, reverse=True)
+
+_NORM_MIN_LEN = 6   # 归一化后至少保留这么多字,避免把标题剥空后误合并
+
+
 def _norm_title(t: str) -> str:
-    t = re.sub(r"[【】\[\]（）()《》<>\"'“”‘’·、,，。.：:；;!！?？\-—_/\\|]", "", t)
-    t = re.sub(r"(公开招标|招标公告|采购公告|中标公告|成交公告|结果公告|竞争性磋商|询价公告|公告|公示|项目|采购|服务)$", "", t)
-    return re.sub(r"\s+", "", t)
+    """归一化标题,供 SimHash 比对用。
+
+    原来的实现只剥一层尾部噪声词,导致同一个标讯在不同站点标题略有差异时
+    (如"…公开招标公告" vs "…招标公告")汉明距离远超阈值,去重形同虚设。
+    这里改成反复剥离任意位置的通用词,直到不再变化。
+    """
+    t = re.sub(r"[^\w\u4e00-\u9fa5]", "", t)
+    changed = True
+    while changed:
+        changed = False
+        for w in _NORM_DROP:
+            if w and w in t and len(t) - len(w) >= _NORM_MIN_LEN:
+                t = t.replace(w, "")
+                changed = True
+    return t
 
 
 def _hamming(a: int, b: int) -> int:
+    """两个 SimHash 的汉明距离(不同的二进制位数)。"""
     return bin(a ^ b).count("1")
 
 
-def dedupe(items: list[dict], threshold: int = 3) -> list[dict]:
+def dedupe(items: list[dict], threshold: int = 8) -> list[dict]:
     """跨源同一标讯合并。保留分数最高的一条,并记录其他来源。"""
-    items = sorted(items, key=lambda x: (-x.get("score", 0), x.get("date") or ""))
+    # 两趟稳定排序:先按日期倒序,再按(是否有日期, -分数)。
+    # 直接写 x.get("date") or "" 会让无日期条目(空串)排到最前面,与原本意图相反。
+    items.sort(key=lambda x: x.get("date") or "", reverse=True)
+    items.sort(key=lambda x: (0 if x.get("date") else 1, -x.get("score", 0)))
     kept: list[dict] = []
     kept_hashes: list[tuple[int, int]] = []  # (simhash, index)
 
@@ -508,11 +548,24 @@ def collect(cfg_sources: dict, force_all: bool = False) -> tuple[list[dict], lis
             for it in items:
                 it["source_status"] = src.get("status", "")
             rows.extend(items)
-            entry.update({"last_success": today_str(), "last_count": len(items),
-                          "consecutive_failures": 0, "last_error": None,
-                          "newest_item_date": max([i["date"] for i in items if i.get("date")], default=None)})
-            if src.get("adapter") != "manual_links":
-                log(f"  ✓ {src.get('name', sid):<28s} 抓到 {len(items):3d} 条")
+            if items:
+                entry.update({"last_success": today_str(), "last_count": len(items),
+                              "consecutive_failures": 0, "last_error": None, "zero_streak": 0,
+                              "newest_item_date": max([i["date"] for i in items if i.get("date")], default=None)})
+                if src.get("adapter") != "manual_links":
+                    log(f"  ✓ {src.get('name', sid):<28s} 抓到 {len(items):3d} 条")
+            elif src.get("adapter") == "manual_links":
+                # 手动链接池允许为空(用户还没贴链接),不算失败
+                entry.update({"last_success": today_str(), "last_count": 0,
+                              "consecutive_failures": 0, "last_error": None, "zero_streak": 0})
+            else:
+                # 抓到 0 条 ≠ 成功:多半是站点改版/被反爬,导致 link_filter 一条都匹配不上。
+                # 原来无条件清零失败计数,会让这种"静默失效"永远不告警 ——
+                # 页面还显示"在线",心跳消息还报"系统运行正常",而实际上这个源已经瞎了。
+                zs = int(entry.get("zero_streak", 0)) + 1
+                entry.update({"last_count": 0, "zero_streak": zs,
+                              "last_error": f"抓到 0 条(疑似改版或反爬),已连续 {zs} 次"})
+                log(f"  ⚠ {src.get('name', sid):<28s} 抓到 0 条(连续 {zs} 次)")
         except Exception as e:  # noqa: BLE001
             entry["consecutive_failures"] = int(entry.get("consecutive_failures", 0)) + 1
             entry["last_error"] = str(e)[:200]
@@ -541,6 +594,7 @@ def fetch_template_source(src: dict, fetcher: "Fetcher") -> list[dict]:
     if src.get("request_delay"):
         fetcher.delay = float(src["request_delay"])   # 该类站点要放慢,避免被封
     items: list[dict] = []
+    failed: list[str] = []
     try:
         for kw in kws:
             url = tpl.replace("{kw}", urllib.parse.quote(str(kw)))
@@ -552,9 +606,16 @@ def fetch_template_source(src: dict, fetcher: "Fetcher") -> list[dict]:
                 items.extend(got)
                 log(f"    · 关键词「{kw}」→ {len(got)} 条")
             except Exception as e:  # noqa: BLE001
+                failed.append(str(kw))
                 log(f"    ! 关键词「{kw}」失败: {str(e)[:60]}")
     finally:
         fetcher.delay = old_delay
+    # 所有关键词都失败 → 这是真失败,必须抛错让上层记入失败计数,
+    # 否则会变成"成功但 0 条",源废了也没人知道。
+    if kws and len(failed) == len(kws):
+        raise RuntimeError(f"{len(failed)} 个关键词全部失败(最后一个: {failed[-1]})")
+    if failed:
+        log(f"    ⚠ {len(failed)}/{len(kws)} 个关键词失败: {','.join(failed)}")
     return items
 
 
@@ -854,6 +915,10 @@ def collect_manual_links(cfg_sources: dict, fetcher: "Fetcher") -> list[dict]:
         lines = f.read().splitlines()
 
     cache = load_json_file(MANUAL_CACHE_PATH, {})
+    # 清理过期缓存,否则这个文件会随着时间无限增长
+    _cut = (now_cst() - timedelta(days=180)).strftime("%Y-%m-%d")
+    cache = {k: v for k, v in cache.items()
+             if not v.get("fetched_at") or v["fetched_at"] >= _cut}
     items: list[dict] = []
     for raw_line in lines:
         line = raw_line.strip()
@@ -927,8 +992,6 @@ def build(cfg_sources: dict, kw: dict, force_all: bool = False) -> dict:
         it["locality"] = scorer.detect_locality(it["title"]) or ""
         # 按标题内容重新判定是不是真的招投标公告(源头 kind 不够准)
         it["category"] = refine_category(it.get("kind", "news"), it["title"])
-        # 无日期的条目排后面
-        it["_dated"] = 1 if it.get("date") else 0
         filtered.append(it)
     kept = len(filtered)
     log(f"过滤后保留 {kept} 条(丢弃 {dropped_ex} 条不相关, {dropped_old} 条过期)")
