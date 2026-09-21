@@ -1,0 +1,59 @@
+name: 源探测
+
+# ---------------------------------------------------------------
+# 用途:一次性测试所有数据源(含 26 个已关闭的候选源)能不能访问。
+#
+# 为什么要在云端跑:中文政务站对境外 IP 的表现差异极大。
+# 实测同一批源,GitHub Actions 云端 11/11 成功,而本地探测却偶发 502/超时。
+# 所以"这个源到底能不能用"必须在真实运行环境里判定。
+#
+# 跑完后:
+#   1. 你会收到一条钉钉消息,列出每个源的结果(不用翻日志)
+#   2. 结果也会写入 data/probe_report.json 并提交到仓库
+#
+# 这个工作流【不会】影响每日正常推送,只会额外提交一个报告文件。
+# ---------------------------------------------------------------
+on:
+  workflow_dispatch:        # 只在手动点击时运行
+
+permissions:
+  contents: write
+
+concurrency:
+  group: carbon-radar-probe
+  cancel-in-progress: false
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - name: 拉取代码
+        uses: actions/checkout@v4
+
+      - name: 安装 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 安装依赖
+        run: pip install -r requirements.txt
+
+      - name: 探测所有数据源
+        env:
+          DINGTALK_WEBHOOK: ${{ secrets.DINGTALK_WEBHOOK }}
+          DINGTALK_SECRET: ${{ secrets.DINGTALK_SECRET }}
+        run: python src/main.py --probe
+
+      - name: 提交探测报告
+        if: always()
+        run: |
+          git config user.name  "carbon-radar-bot"
+          git config user.email "carbon-radar-bot@users.noreply.github.com"
+          git add -A
+          if git diff --staged --quiet; then
+            echo "报告无变化"
+          else
+            git commit -m "源探测报告 $(TZ='Asia/Shanghai' date +'%Y-%m-%d %H:%M')"
+            git push
+          fi

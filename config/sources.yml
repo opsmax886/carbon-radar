@@ -255,3 +255,331 @@ sources:
     enabled: true
     status: 实测可用 —— 与 mee_wsq 同源,但单独归类到"方法学"标签,便于你只盯方法学更新
     note: 2025 年生态环境部集中发布了 12 项自愿减排方法学,此栏目务必高频关注
+
+  # ==========================================================
+  # 六、重点地区候选源(待探测)
+  # ----------------------------------------------------------
+  # 以下 26 个是你指定的 13 个重点地区的官方平台。
+  # 全部默认关闭 —— 因为它们的可用性必须【在 GitHub Actions 里】才能测准:
+  #   实测云端 11/11 全部成功,而本地探测反而偶发 502/超时。
+  # 中文政务站对境外 IP 的表现差异极大,本地结论不可信。
+  #
+  # 探测方法:运行 probe 工作流(Actions → 源探测 → Run workflow),
+  #   跑完会给你发一条钉钉消息,列出每个站点的实测结果。
+  #   把确认可用的源改成 enabled: true 并补上 link_filter 即可。
+  #
+  # link_filter 只留空 = 不筛选链接(探测模式),会连导航链接一起抓,
+  #   目的是先看清站点有哪些链接形态,再据此写精确的正则。
+  # ==========================================================
+  - id: gz_ccgp
+    name: 贵州政府采购网
+    kind: tender
+    adapter: html_list
+    url: http://www.ccgp-guizhou.gov.cn/
+    base: http://www.ccgp-guizhou.gov.cn/
+    link_filter: ''
+    encoding: ''
+    enabled: false
+    default_region: 贵州
+    status: 候选源 —— 待云端探测确认可用性
+    note: 探测通过后,把 enabled 改成 true,并补上精确的 link_filter
+  - id: gz_ggzy
+    name: 贵州公共资源交易
+    kind: tender
+    adapter: html_list
+    url: https://ggzy.guizhou.gov.cn/
+    base: https://ggzy.guizhou.gov.cn/
+    link_filter: ''
+    encoding: ''
+    enabled: false
+    default_region: 贵州
+    status: 候选源 —— 待云端探测确认可用性
+    note: 探测通过后,把 enabled 改成 true,并补上精确的 link_filter
+  - id: zj_zcy
+    name: 浙江政采云
+    kind: tender
+    adapter: html_list
+    url: https://zfcg.czt.zj.gov.cn/
+    base: https://zfcg.czt.zj.gov.cn/
+    link_filter: ''
+    encoding: ''
+    enabled: false
+    default_region: 浙江
+    status: 候选源 —— 待云端探测确认可用性
+    note: 探测通过后,把 enabled 改成 true,并补上精确的 link_filter
+  - id: he_ccgp
+    name: 河北政府采购网
+    kind: tender
+    adapter: html_list
+    url: http://www.ccgp-hebei.gov.cn/
+    base: http://www.ccgp-hebei.gov.cn/
+    link_filter: ''
+    encoding: ''
+    enabled: false
+    default_region: 河北
+    status: 候选源 —— 待云端探测确认可用性
+    note: 探测通过后,把 enabled 改成 true,并补上精确的 link_filter
+  - id: he_ggzy
+    name: 河北公共资源交易
+    kind: tender
+    adapter: html_list
+    url: http://ggzy.hebei.gov.cn/
+    base: http://ggzy.hebei.gov.cn/
+    link_filter: ''
+    encoding: ''
+    enabled: false
+    default_region: 河北
+    status: 候选源 —— 待云端探测确认可用性
+    note: 探测通过后,把 enabled 改成 true,并补上精确的 link_filter
+  - id: ln_ccgp
+    name: 辽宁政府采购网
+    kind: tender
+    adapter: html_list
+    url: http://www.ccgp-liaoning.gov.cn/
+    base: http://www.ccgp-liaoning.gov.cn/
+    link_filter: ''
+    encoding: ''
+    enabled: false
+    default_region: 辽宁
+    status: 候选源 —— 待云端探测确认可用性
+    note: 探测通过后,把 enabled 改成 true,并补上精确的 link_filter
+  - id: ln_ggzy
+    name: 辽宁公共资源交易
+    kind: tender
+    adapter: html_list
+    url: https://www.lnsggzy.com/
+    base: https://www.lnsggzy.com/
+    link_filter: ''
+    encoding: ''
+    enabled: false
+    default_region: 辽宁
+    status: 候选源 —— 待云端探测确认可用性
+    note: 探测通过后,把 enabled 改成 true,并补上精确的 link_filter
+  - id: jl_ccgp
+    name: 吉林政府采购网
+    kind: tender
+    adapter: html_list
+    url: http://www.ccgp-jilin.gov.cn/
+    base: http://www.ccgp-jilin.gov.cn/
+    link_filter: ''
+    encoding: ''
+    enabled: false
+    default_region: 吉林
+    status: 候选源 —— 待云端探测确认可用性
+    note: 探测通过后,把 enabled 改成 true,并补上精确的 link_filter
+  - id: jl_ggzy
+    name: 吉林公共资源交易
+    kind: tender
+    adapter: html_list
+    url: http://www.jlggzy.gov.cn/
+    base: http://www.jlggzy.gov.cn/
+    link_filter: ''
+    encoding: ''
+    enabled: false
+    default_region: 吉林
+    status: 候选源 —— 待云端探测确认可用性
+    note: 探测通过后,把 enabled 改成 true,并补上精确的 link_filter
+  - id: hlj_ccgp
+    name: 黑龙江政府采购网
+    kind: tender
+    adapter: html_list
+    url: https://www.ccgp-helongjiang.gov.cn/
+    base: https://www.ccgp-helongjiang.gov.cn/
+    link_filter: ''
+    encoding: ''
+    enabled: false
+    default_region: 黑龙江
+    status: 候选源 —— 待云端探测确认可用性
+    note: 探测通过后,把 enabled 改成 true,并补上精确的 link_filter
+  - id: hlj_ggzy
+    name: 黑龙江公共资源交易
+    kind: tender
+    adapter: html_list
+    url: https://ggzyjyw.hlj.gov.cn/
+    base: https://ggzyjyw.hlj.gov.cn/
+    link_filter: ''
+    encoding: ''
+    enabled: false
+    default_region: 黑龙江
+    status: 候选源 —— 待云端探测确认可用性
+    note: 探测通过后,把 enabled 改成 true,并补上精确的 link_filter
+  - id: sx_ccgp
+    name: 山西政府采购网
+    kind: tender
+    adapter: html_list
+    url: http://www.ccgp-shanxi.gov.cn/
+    base: http://www.ccgp-shanxi.gov.cn/
+    link_filter: ''
+    encoding: ''
+    enabled: false
+    default_region: 山西/太原
+    status: 候选源 —— 待云端探测确认可用性
+    note: 探测通过后,把 enabled 改成 true,并补上精确的 link_filter
+  - id: sx_ggzy
+    name: 山西公共资源交易
+    kind: tender
+    adapter: html_list
+    url: http://www.sxggzy.cn/
+    base: http://www.sxggzy.cn/
+    link_filter: ''
+    encoding: ''
+    enabled: false
+    default_region: 山西/太原
+    status: 候选源 —— 待云端探测确认可用性
+    note: 探测通过后,把 enabled 改成 true,并补上精确的 link_filter
+  - id: ty_ggzy
+    name: 太原公共资源交易
+    kind: tender
+    adapter: html_list
+    url: http://ggzy.xzspglj.taiyuan.gov.cn/
+    base: http://ggzy.xzspglj.taiyuan.gov.cn/
+    link_filter: ''
+    encoding: ''
+    enabled: false
+    default_region: 太原
+    status: 候选源 —— 待云端探测确认可用性
+    note: 探测通过后,把 enabled 改成 true,并补上精确的 link_filter
+  - id: hi_ccgp
+    name: 海南政府采购网
+    kind: tender
+    adapter: html_list
+    url: https://www.ccgp-hainan.gov.cn/
+    base: https://www.ccgp-hainan.gov.cn/
+    link_filter: ''
+    encoding: ''
+    enabled: false
+    default_region: 海南
+    status: 候选源 —— 待云端探测确认可用性
+    note: 探测通过后,把 enabled 改成 true,并补上精确的 link_filter
+  - id: hi_ggzy
+    name: 海南公共资源交易
+    kind: tender
+    adapter: html_list
+    url: https://zw.hainan.gov.cn/ggzy/
+    base: https://zw.hainan.gov.cn/ggzy/
+    link_filter: ''
+    encoding: ''
+    enabled: false
+    default_region: 海南
+    status: 候选源 —— 待云端探测确认可用性
+    note: 探测通过后,把 enabled 改成 true,并补上精确的 link_filter
+  - id: hn_ccgp
+    name: 湖南政府采购网
+    kind: tender
+    adapter: html_list
+    url: http://www.ccgp-hunan.gov.cn/
+    base: http://www.ccgp-hunan.gov.cn/
+    link_filter: ''
+    encoding: ''
+    enabled: false
+    default_region: 湖南
+    status: 候选源 —— 待云端探测确认可用性
+    note: 探测通过后,把 enabled 改成 true,并补上精确的 link_filter
+  - id: hn_ggzy
+    name: 湖南公共资源交易
+    kind: tender
+    adapter: html_list
+    url: https://ggzy.hunan.gov.cn/
+    base: https://ggzy.hunan.gov.cn/
+    link_filter: ''
+    encoding: ''
+    enabled: false
+    default_region: 湖南
+    status: 候选源 —— 待云端探测确认可用性
+    note: 探测通过后,把 enabled 改成 true,并补上精确的 link_filter
+  - id: hb_ccgp
+    name: 湖北政府采购网
+    kind: tender
+    adapter: html_list
+    url: http://www.ccgp-hubei.gov.cn/
+    base: http://www.ccgp-hubei.gov.cn/
+    link_filter: ''
+    encoding: ''
+    enabled: false
+    default_region: 湖北
+    status: 候选源 —— 待云端探测确认可用性
+    note: 探测通过后,把 enabled 改成 true,并补上精确的 link_filter
+  - id: hb_ggzy
+    name: 湖北公共资源交易
+    kind: tender
+    adapter: html_list
+    url: http://www.hbggzyfwpt.cn/
+    base: http://www.hbggzyfwpt.cn/
+    link_filter: ''
+    encoding: ''
+    enabled: false
+    default_region: 湖北
+    status: 候选源 —— 待云端探测确认可用性
+    note: 探测通过后,把 enabled 改成 true,并补上精确的 link_filter
+  - id: sh_ccgp
+    name: 上海政府采购网
+    kind: tender
+    adapter: html_list
+    url: http://www.zfcg.sh.gov.cn/
+    base: http://www.zfcg.sh.gov.cn/
+    link_filter: ''
+    encoding: ''
+    enabled: false
+    default_region: 上海
+    status: 候选源 —— 待云端探测确认可用性
+    note: 探测通过后,把 enabled 改成 true,并补上精确的 link_filter
+  - id: sh_ggzy
+    name: 上海公共资源交易
+    kind: tender
+    adapter: html_list
+    url: https://www.shggzy.com/
+    base: https://www.shggzy.com/
+    link_filter: ''
+    encoding: ''
+    enabled: false
+    default_region: 上海
+    status: 候选源 —— 待云端探测确认可用性
+    note: 探测通过后,把 enabled 改成 true,并补上精确的 link_filter
+  - id: bj_ccgp
+    name: 北京政府采购网
+    kind: tender
+    adapter: html_list
+    url: http://www.ccgp-beijing.gov.cn/
+    base: http://www.ccgp-beijing.gov.cn/
+    link_filter: ''
+    encoding: ''
+    enabled: false
+    default_region: 北京
+    status: 候选源 —— 待云端探测确认可用性
+    note: 探测通过后,把 enabled 改成 true,并补上精确的 link_filter
+  - id: bj_ggzy
+    name: 北京公共资源交易
+    kind: tender
+    adapter: html_list
+    url: https://ggzyfw.beijing.gov.cn/
+    base: https://ggzyfw.beijing.gov.cn/
+    link_filter: ''
+    encoding: ''
+    enabled: false
+    default_region: 北京
+    status: 候选源 —— 待云端探测确认可用性
+    note: 探测通过后,把 enabled 改成 true,并补上精确的 link_filter
+  - id: nm_ccgp
+    name: 内蒙古政府采购网
+    kind: tender
+    adapter: html_list
+    url: https://www.ccgp-neimenggu.gov.cn/
+    base: https://www.ccgp-neimenggu.gov.cn/
+    link_filter: ''
+    encoding: ''
+    enabled: false
+    default_region: 内蒙
+    status: 候选源 —— 待云端探测确认可用性
+    note: 探测通过后,把 enabled 改成 true,并补上精确的 link_filter
+  - id: nm_ggzy
+    name: 内蒙古公共资源交易
+    kind: tender
+    adapter: html_list
+    url: http://ggzyjy.nmg.gov.cn/
+    base: http://ggzyjy.nmg.gov.cn/
+    link_filter: ''
+    encoding: ''
+    enabled: false
+    default_region: 内蒙
+    status: 候选源 —— 待云端探测确认可用性
+    note: 探测通过后,把 enabled 改成 true,并补上精确的 link_filter

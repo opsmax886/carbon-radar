@@ -145,6 +145,84 @@ def site_url() -> str:
     return ""
 
 
+def run_probe(cfg_sources: dict) -> int:
+    """源探测:在真实运行环境里逐个测试【所有】源,包括已关闭的候选源。
+
+    为什么必须专门做这件事:
+      中文政务站对境外 IP 的表现差异极大。实测同一批源,GitHub Actions 云端
+      11/11 全部成功,而本地探测却偶发 502/超时/连接中断。所以"一个源能不能用"
+      必须在真正的运行环境(云端)里判定,本地结论不可信。
+
+    探测结果会:
+      1. 打印到日志
+      2. 写入 data/probe_report.json
+      3. 推送到钉钉(方便你不用翻日志)
+    """
+    settings = cfg_sources.get("settings") or {}
+    fetcher = radar.Fetcher(settings)
+    sources = cfg_sources.get("sources") or []
+    log(f"开始探测 {len(sources)} 个源(含已关闭的候选源)…")
+
+    results = []
+    for src in sources:
+        if src.get("adapter") == "manual_links":
+            continue
+        sid = src.get("id")
+        rec = {"id": sid, "name": src.get("name", sid), "url": src.get("url", ""),
+               "enabled": bool(src.get("enabled"))}
+        try:
+            page = fetcher.get(src["url"], src.get("encoding") or None)
+            items = radar.parse_html_list(page, src, src.get("base") or src["url"])
+            hits = [i for i in items if any(k in i["title"] for k in PROBE_TENDER_KW)]
+            dated = [i for i in items if i.get("date")]
+            rec.update({"ok": True, "bytes": len(page), "items": len(items),
+                        "tender_hits": len(hits), "dated": len(dated),
+                        "samples": [i["title"] for i in (hits or items)[:3]],
+                        "sample_urls": [i["url"] for i in (hits or items)[:1]]})
+            flag = "✅" if hits else ("△" if items else "○")
+            log(f"  {flag} {rec['name']:<26s} {len(page):>8d}字节  条目{len(items):>4d}  含招标{len(hits):>4d}")
+        except Exception as e:  # noqa: BLE001
+            rec.update({"ok": False, "error": str(e)[:180], "items": 0, "tender_hits": 0})
+            log(f"  ✗ {rec['name']:<26s} 失败: {str(e)[:70]}")
+        results.append(rec)
+
+    ok = [r for r in results if r.get("ok")]
+    usable = [r for r in ok if r.get("tender_hits", 0) > 0]
+    save_json(os.path.join(DATA_DIR, "probe_report.json"),
+              {"generated_at": now_cst().strftime("%Y-%m-%d %H:%M"), "results": results})
+
+    log("=" * 62)
+    log(f"探测完成:{len(results)} 个源 | 可访问 {len(ok)} | 其中抓到招标类内容 {len(usable)}")
+    for r in usable:
+        log(f"   可用: {r['name']}  ({r['tender_hits']} 条招标)  {r['url']}")
+    log("=" * 62)
+
+    # 推送到钉钉 —— 免得你去翻日志
+    if not os.environ.get("NO_PUSH"):
+        lines = ["## 碳雷达 · 源探测报告", "",
+                 f"> 共测 {len(results)} 个源 ｜ 可访问 **{len(ok)}** 个 ｜ 抓到招标内容 **{len(usable)}** 个", ""]
+        if usable:
+            lines += ["### ✅ 确认可用(可以启用)", ""]
+            for r in usable:
+                lines.append(f"· **{r['name']}** ｜ 条目 {r['items']} · 招标 {r['tender_hits']} ｜ {r['url']}")
+                lines.append("")
+                if r.get("samples"):
+                    lines.append(f"　样例:{r['samples'][0][:52]}")
+                    lines.append("")
+        dead = [r for r in results if not r.get("ok")]
+        if dead:
+            lines += ["### ❌ 无法访问", ""]
+            for r in dead:
+                lines.append(f"· {r['name']} ｜ {r.get('error', '')[:60]}")
+                lines.append("")
+        lines += ["---", "", "把上面「确认可用」的源告诉 AI,即可接入。"]
+        notify_mod.push_dingtalk(f"碳雷达 · 源探测报告", "\n".join(lines))
+    return 0
+
+
+PROBE_TENDER_KW = ("招标", "采购", "中标", "成交", "询比", "磋商", "比选", "投标", "公告")
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description="碳雷达 · 双碳招投标与资讯聚合")
     ap.add_argument("--no-ai", action="store_true", help="跳过 AI 增强")
@@ -152,7 +230,16 @@ def main() -> int:
     ap.add_argument("--all-sources", action="store_true", help="包含已禁用的源")
     ap.add_argument("--limit", type=int, default=200, help="每日最多输出条数")
     ap.add_argument("--min-score", type=int, default=15, help="低于此分不输出")
+    ap.add_argument("--probe", action="store_true",
+                    help="源探测模式:测试所有源(含已关闭候选)的可用性,不发正常推送")
     args = ap.parse_args()
+
+    # ---- 源探测模式:只测可用性,不跑正常流程 ----
+    if args.probe:
+        log("=" * 62)
+        log("碳雷达 · 源探测模式")
+        log("=" * 62)
+        return run_probe(radar.load_yaml("sources.yml"))
 
     log("=" * 62)
     log("碳雷达启动")
