@@ -1,0 +1,57 @@
+name: 发布网页
+
+# ---------------------------------------------------------------
+# 用途:把 web/ 目录发布到 GitHub Pages。
+#
+# 为什么需要单独一个工作流:
+#   代码提交到 GitHub ≠ 网页已更新。网页是由工作流"发布"出去的,
+#   而每日工作流只在固定时间跑。所以改了前端(index.html)后,
+#   要么等到第二天,要么手动跑一次 —— 这个工作流就是干这个的。
+#
+# 触发方式:
+#   1. 自动:只要 web/index.html 被修改并推送,就自动重新发布
+#      (数据文件 web/data.json 的更新由每日工作流负责发布,不在这里)
+#   2. 手动:Actions → 发布网页 → Run workflow
+#
+# 这个工作流【不抓取、不推送钉钉】,只发布网页,所以随时跑都没副作用。
+# ---------------------------------------------------------------
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'web/index.html'
+      - '.github/workflows/deploy-web.yml'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: carbon-radar-pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: github.event.repository.visibility != 'private'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: 拉取最新代码
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+
+      - name: 配置 Pages
+        uses: actions/configure-pages@v5
+
+      - name: 打包 web 目录
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: web
+
+      - name: 发布
+        id: deployment
+        uses: actions/deploy-pages@v4
