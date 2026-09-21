@@ -103,16 +103,20 @@ class Fetcher:
         self._last_hit[host] = time.time()
 
     def get(self, url: str, encoding: str | None = None) -> str:
-        headers = {
-            "User-Agent": self.ua,
-            "Accept": "text/html,application/xhtml+xml,application/xml,*/*;q=0.8",
-            "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",
-        }
+        return self.request(url, headers={
+            "Accept": "text/html,application/xhtml+xml,application/xml,*/*;q=0.8"})
+
+    def request(self, url: str, method: str = "GET", headers: dict | None = None,
+                data: bytes | None = None, encoding: str | None = None) -> str:
+        """通用请求:支持自定义方法/请求头/请求体,供 JSON 接口类数据源使用。"""
+        h = {"User-Agent": self.ua, "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8"}
+        if headers:
+            h.update(headers)
         last_err = None
         for attempt in range(1, self.retries + 1):
             self._throttle(url)
             try:
-                req = urllib.request.Request(url, headers=headers)
+                req = urllib.request.Request(url, data=data, headers=h, method=method)
                 with urllib.request.urlopen(req, timeout=self.timeout, context=self.ctx) as r:
                     raw = r.read()
                 text = decode_body(raw, encoding, r.headers.get("Content-Type", ""))
@@ -124,7 +128,7 @@ class Fetcher:
                 if attempt < self.retries:
                     backoff = 2 ** attempt
                     time.sleep(backoff)
-        raise RuntimeError(f"抓取失败: {last_err}")
+        raise RuntimeError(f"请求失败: {last_err}")
 
 
 def decode_body(raw: bytes, encoding: str | None, content_type: str) -> str:
@@ -453,11 +457,14 @@ def collect(cfg_sources: dict, force_all: bool = False) -> tuple[list[dict], lis
                 else:
                     log(f"  · {src.get('name', sid):<28s} 暂无链接")
             else:
-                page = fetcher.get(src["url"], src.get("encoding"))
-                if src.get("adapter") == "rss":
-                    items = parse_rss(page, src)
+                if src.get("adapter") == "json_api":
+                    items = fetch_json_api(src, fetcher)
                 else:
-                    items = parse_html_list(page, src, src.get("base") or src["url"])
+                    page = fetcher.get(src["url"], src.get("encoding"))
+                    if src.get("adapter") == "rss":
+                        items = parse_rss(page, src)
+                    else:
+                        items = parse_html_list(page, src, src.get("base") or src["url"])
                 items = items[: global_limit or None]
             for it in items:
                 it["source_status"] = src.get("status", "")
@@ -496,6 +503,160 @@ def parse_rss(page: str, source: dict) -> list[dict]:
             out.append({"title": title, "url": url, "date": date, "source_id": source["id"],
                         "source_name": source.get("name", source["id"]), "kind": source.get("kind", "news")})
     return out
+
+
+# ---------------------------------------------------------------- 通用 JSON 接口
+# 商业标讯 API(剑鱼、千里马、我要标讯等)都提供 JSON 接口。
+# 有了这个适配器,接入任何一家都只需在 sources.yml 里写配置,不用改代码。
+
+def _env_subst(v):
+    """把配置里的 ${ENV_NAME} 替换成环境变量值 —— 密钥不写进配置文件。
+
+    在 GitHub Actions 里,把密钥配成 Secrets;本地则设成环境变量。
+    取不到值时替换成空串,并会在下面报"密钥未配置"的友好错误。
+    """
+    if isinstance(v, str):
+        return re.sub(r"\$\{(\w+)\}", lambda m: os.environ.get(m.group(1), ""), v)
+    if isinstance(v, dict):
+        return {k: _env_subst(x) for k, x in v.items()}
+    if isinstance(v, list):
+        return [_env_subst(x) for x in v]
+    return v
+
+
+def _dig(obj, path: str):
+    """按 a.b.c 或 list.0.field 的路径取值。"""
+    cur = obj
+    for part in str(path).split("."):
+        if part == "":
+            continue
+        if isinstance(cur, list):
+            try:
+                cur = cur[int(part)]
+            except (ValueError, IndexError):
+                return None
+        elif isinstance(cur, dict):
+            cur = cur.get(part)
+        else:
+            return None
+        if cur is None:
+            return None
+    return cur
+
+
+def _missing_env(obj, acc=None) -> set:
+    """找出配置里引用了、但环境变量并不存在的名字。
+
+    必须在 _env_subst 之前检查 —— 替换会把 ${X} 变成空串,
+    之后就再也看不出"用户其实没配置"了,只会发一个注定失败的请求。
+    """
+    acc = acc if acc is not None else set()
+    if isinstance(obj, str):
+        for m in re.finditer(r"\$\{(\w+)\}", obj):
+            if not os.environ.get(m.group(1)):
+                acc.add(m.group(1))
+    elif isinstance(obj, dict):
+        for v in obj.values():
+            _missing_env(v, acc)
+    elif isinstance(obj, list):
+        for v in obj:
+            _missing_env(v, acc)
+    return acc
+
+
+def _norm_date(v) -> str | None:
+    """把各种日期表示统一成 YYYY-MM-DD。支持时间戳(秒/毫秒)与常见字符串。"""
+    if v is None or v == "":
+        return None
+    s = str(v).strip()
+    if re.fullmatch(r"\d{10,13}", s):
+        ts = int(s)
+        if ts > 10 ** 12:
+            ts //= 1000
+        try:
+            return datetime.fromtimestamp(ts, CST).strftime("%Y-%m-%d")
+        except (ValueError, OSError, OverflowError):
+            return None
+    return date_from_text(s)
+
+
+def fetch_json_api(src: dict, fetcher: "Fetcher") -> list[dict]:
+    """按 YAML 配置调用 JSON 接口并映射字段。
+
+    sources.yml 示例:
+      adapter: json_api
+      method: POST
+      url: https://gate.gov-bid.com/outer-gateway/xxx/search
+      headers:
+        Authorization: "Bearer ${WOYAOBID_API_KEY}"
+      body: {keyword: 碳核查, pageNo: 1, pageSize: 50}
+      items_path: data.records
+      title_field: title
+      url_field: detailUrl
+      date_field: publishTime
+      summary_field: content
+    """
+    url = _env_subst(src["url"])
+    headers = {"Accept": "application/json, text/plain, */*"}
+    headers.update(_env_subst(src.get("headers") or {}))
+    method = (src.get("method") or "GET").upper()
+    params = _env_subst(src.get("params") or {})
+    body = _env_subst(src.get("body") or {})
+
+    # 先检查密钥是否配好,避免发一个注定失败的请求(必须在 _env_subst 之前判断)
+    missing = _missing_env(src.get("url", "")) | _missing_env(src.get("headers") or {}) \
+        | _missing_env(src.get("body") or {}) | _missing_env(src.get("params") or {})
+    if missing:
+        raise RuntimeError(f"密钥未配置:环境变量 {'、'.join(sorted(missing))} 不存在"
+                           f"(请在 GitHub 仓库 Settings → Secrets 里添加)")
+    if src.get("auth_required") and not headers.get("Authorization"):
+        raise RuntimeError("密钥未配置:该接口需要 Authorization 请求头")
+
+    data = None
+    if method == "POST":
+        data = json.dumps(body, ensure_ascii=False).encode("utf-8")
+        headers.setdefault("Content-Type", "application/json;charset=UTF-8")
+    elif params:
+        url += ("&" if "?" in url else "?") + urllib.parse.urlencode(params, doseq=True)
+
+    text = fetcher.request(url, method=method, headers=headers, data=data)
+    try:
+        payload = json.loads(text)
+    except json.JSONDecodeError:
+        raise RuntimeError(f"返回的不是合法 JSON(前 120 字符): {text[:120]}")
+
+    rows = _dig(payload, src.get("items_path", "data"))
+    if not isinstance(rows, list):
+        # 兜底:自动在顶层找一个"看起来像列表"的字段
+        for k, v in (payload.items() if isinstance(payload, dict) else []):
+            if isinstance(v, list) and v:
+                rows = v
+                break
+    if not isinstance(rows, list):
+        raise RuntimeError(f"没找到条目数组,请检查 items_path。返回顶层字段: "
+                           f"{list(payload.keys())[:8] if isinstance(payload, dict) else type(payload).__name__}")
+
+    tf, uf = src.get("title_field", "title"), src.get("url_field", "url")
+    df, sf = src.get("date_field", "publishTime"), src.get("summary_field", "")
+    out = []
+    for r in rows:
+        if not isinstance(r, dict):
+            continue
+        title = clean_text(str(_dig(r, tf) or ""))
+        link = str(_dig(r, uf) or "").strip()
+        if not title or len(title) < 6:
+            continue
+        out.append({
+            "title": title,
+            "url": link or url,
+            "date": _norm_date(_dig(r, df)),
+            "source_id": src["id"],
+            "source_name": src.get("name", src["id"]),
+            "kind": src.get("kind", "tender"),
+            "summary": clean_text(str(_dig(r, sf) or ""))[:400] if sf else "",
+        })
+    return out
+
 
 
 # ---------------------------------------------------------------- 手动链接池

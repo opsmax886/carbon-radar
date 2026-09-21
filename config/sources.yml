@@ -583,3 +583,43 @@ sources:
     default_region: 内蒙
     status: 候选源 —— 待云端探测确认可用性
     note: 探测通过后,把 enabled 改成 true,并补上精确的 link_filter
+
+  # ==========================================================
+  # 七、我要标讯(woyaobid / gov-bid.com)JSON 接口
+  # ----------------------------------------------------------
+  # 已探明:该平台是标准 API 网关,业务接口在
+  #     https://gate.gov-bid.com/outer-gateway/...
+  # 另有 MCP 端点 https://gate.gov-bid.com/bid-gateway/mcp
+  #
+  # ⚠️ 下面的 url / items_path / 字段名都是【占位示例】,必须照着
+  #    官方文档改。文档页:console.woyaobid.com/gateway-admin/share/api-doc
+  #    需要从文档里抄四样东西:
+  #      1) 接口完整地址        2) 认证方式(请求头怎么带 key)
+  #      3) 请求参数(关键词/地区/时间/分页)  4) 返回字段名
+  #
+  # 密钥这样配:GitHub 仓库 Settings → Secrets → 新增 WOYAOBID_API_KEY,
+  # 然后下面用 ${WOYAOBID_API_KEY} 引用,密钥不会写进代码或日志。
+  # 配好后把 enabled 改成 true 即可。
+  # ==========================================================
+  - id: woyaobid
+    name: 我要标讯 API
+    kind: tender
+    adapter: json_api
+    enabled: false
+    method: POST
+    url: https://gate.gov-bid.com/outer-gateway/REPLACE_WITH_DOC_PATH
+    headers:
+      Authorization: "Bearer ${WOYAOBID_API_KEY}"
+      Content-Type: application/json;charset=UTF-8
+    body:
+      keyword: 碳核查
+      pageNo: 1
+      pageSize: 50
+    items_path: data.records
+    title_field: title
+    url_field: detailUrl
+    date_field: publishTime
+    summary_field: content
+    auth_required: true
+    status: ⚠️ 占位配置 —— 需照官方文档填写 url 与字段名后才能启用
+    note: 认证密钥放 Secrets 里的 WOYAOBID_API_KEY
