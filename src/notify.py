@@ -53,42 +53,45 @@ def build_markdown(items: list[dict], date_str: str, stats: dict, site_url: str 
     news = [i for i in items if i.get("category") == "news"]
 
     lines.append(f"## 碳雷达 · {date_str}")
-    # 分两行写清楚:"本次新增"和"库内累计"是两回事,否则看到"标讯 0"会误以为没抓到标讯
-    lines.append(f"> **本次新增 {stats.get('new', len(items))} 条**"
-                 f"(标讯 {len(tenders)} · 政策/方法学 {len(policies)} · 动态 {len(news)})")
-    lines.append(f"> 库内累计 {stats.get('total', '-')} 条"
-                 f"(标讯 {stats.get('tenders', '-')} · 政策/方法学 {stats.get('policies', '-')}"
-                 f" · 动态 {stats.get('news', '-')})")
+    # 统计压成一行:连续两行 ">" 会被钉钉合并,分不开
+    lines.append(f"> 本次新增 **{stats.get('new', len(items))}** 条"
+                 f"(标讯 {len(tenders)} · 政策/方法学 {len(policies)} · 动态 {len(news)})"
+                 f" ｜ 库内累计 {stats.get('total', '-')} 条")
     lines.append("")
 
     def block(head: str, subset: list[dict], n: int = 8) -> None:
+        """每条信息压成一行,条与条之间用空行隔开。
+
+        为什么不用多行?钉钉对 markdown 支持很有限,单个换行会被折叠成空格,
+        导致所有文字挤成一坨。用空行分隔是唯一在多端都可靠的做法。
+        格式:🔥 [86分] [标题](链接) ｜ 地区 ｜ 来源 ｜ 日期
+        """
         if not subset:
             return
+        lines.append("")
         lines.append(f"### {head}")
+        lines.append("")
         for it in sorted(subset, key=lambda x: -x.get("match", x.get("score", 0)))[:n]:
             score = it.get("match", it.get("score", 0))
             star = "🔥" if score >= 80 else ("⭐" if score >= 60 else "·")
             region = it.get("region", "")
-            date = it.get("date") or ""
-            summary = (it.get("summary") or "").strip()
-            lines.append(f"{star} **[{score}分] {it['title']}**")
-            meta = " · ".join(x for x in [region, date, it.get("source_name", "")] if x)
+            if region in ("未分类", ""):
+                region = ""
+            meta = " ｜ ".join(x for x in [region, it.get("source_name", ""), it.get("date") or ""] if x)
+            line = f"{star} **[{score}分]** [{it['title']}]({it['url']})"
             if meta:
-                lines.append(f"　　{meta}")
-            # AI 不可用时的兜底摘要其实就是标题截断,重复显示没意义
-            if summary and not it["title"].startswith(summary.rstrip("…")):
-                lines.append(f"　　{summary}")
-            lines.append(f"　　[查看原文]({it['url']})")
-        lines.append("")
+                line += f" ｜ {meta}"
+            lines.append(line)
+            lines.append("")   # 空行分段,这是钉钉下唯一可靠的换行方式
 
-    block("🎯 重点标讯", tenders, 8)
-    block("📜 政策与方法学", policies, 6)
-    block("📰 市场动态", news, 5)
+    block("🎯 重点标讯", tenders, 10)
+    block("📜 政策与方法学", policies, 5)
+    block("📰 市场动态", news, 4)
 
     # 本次新增里没有标讯,但库里其实有 —— 明确说一句,避免误以为"标讯没抓到"
     if not tenders and stats.get("tenders"):
-        lines.append(f"> ℹ️ 本次没有新增标讯,但库内已有 **{stats['tenders']} 条标讯**,可在看板中查看。")
         lines.append("")
+        lines.append(f"> ℹ️ 本次没有新增标讯,但库内已有 **{stats['tenders']} 条标讯**,可在看板中查看。")
 
     stale = stats.get("stale_sources") or []
     if stale:
