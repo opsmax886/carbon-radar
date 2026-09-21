@@ -53,8 +53,11 @@ def build_markdown(items: list[dict], date_str: str, stats: dict, site_url: str 
     news = [i for i in items if i.get("category") == "news"]
 
     lines.append(f"## 碳雷达 · {date_str}")
-    # 统计压成一行:连续两行 ">" 会被钉钉合并,分不开
-    lines.append(f"> 本次新增 **{stats.get('new', len(items))}** 条"
+    # 统计压成一行:连续两行 ">" 会被钉钉合并,分不开。
+    # 有推送窗口时写明是"近 N 天",否则你无法判断这条消息覆盖了多长时间。
+    win = stats.get("push_window_days")
+    scope = f"近 {win} 天" if win else "本次"
+    lines.append(f"> {scope}新增 **{stats.get('new', len(items))}** 条"
                  f"(标讯 {len(tenders)} · 政策/方法学 {len(policies)} · 动态 {len(news)})"
                  f" ｜ 库内累计 {stats.get('total', '-')} 条")
     lines.append("")
@@ -69,9 +72,10 @@ def build_markdown(items: list[dict], date_str: str, stats: dict, site_url: str 
         if not subset:
             return
         lines.append("")
-        lines.append(f"### {head}")
+        lines.append(f"### {head}(共 {len(subset)} 条)" if len(subset) > n else f"### {head}")
         lines.append("")
-        for it in sorted(subset, key=lambda x: -x.get("match", x.get("score", 0)))[:n]:
+        for it in sorted(subset, key=lambda x: (x.get("date") or "", -x.get("match", x.get("score", 0))),
+                         reverse=True)[:n]:
             score = it.get("match", it.get("score", 0))
             star = "🔥" if score >= 80 else ("⭐" if score >= 60 else "·")
             region = it.get("region", "")
@@ -83,6 +87,10 @@ def build_markdown(items: list[dict], date_str: str, stats: dict, site_url: str 
                 line += f" ｜ {meta}"
             lines.append(line)
             lines.append("")   # 空行分段,这是钉钉下唯一可靠的换行方式
+
+        if len(subset) > n:
+            lines.append(f"> 另有 {len(subset) - n} 条同类信息,可在看板查看")
+            lines.append("")
 
     block("🎯 重点标讯", tenders, 10)
     block("📜 政策与方法学", policies, 5)

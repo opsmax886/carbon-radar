@@ -310,10 +310,30 @@ def main() -> int:
 
     log(f"数据已写入 web/data.js 与 web/data.json(共 {len(payload['days'])} 天历史)")
 
-    # 推送:只推"本次运行新发现"的,避免同一天多次运行重复打扰
+    # 推送窗口:只推"时间窗内 + 本次新发现"的条目。
+    #
+    # 为什么要时间窗:首次运行(或清空记忆后)会把库里所有内容都当"新增",
+    # 而库里可能存着 120 天内的旧标讯,一次推几十上百条没法看。
+    # 加上窗口后效果正好是用户要的:
+    #   首次运行 → 推近 7 天的全部内容(回填)
+    #   之后每天 → 只推当天真正新出现的(增量)
+    # 无日期的条目不受窗口限制(否则它们永远推不出去)。
+    push_window = int((cfg_sources.get("settings") or {}).get("push_max_age_days", 7) or 0)
+    stats["push_window_days"] = push_window
+
     if not args.no_push:
         log("推送机器人…")
         push_items = [i for i in items if i.get("is_fresh")]
+        if push_window > 0:
+            from datetime import timedelta as _td
+            cutoff = (now_cst() - _td(days=push_window)).strftime("%Y-%m-%d")
+            before = len(push_items)
+            push_items = [i for i in push_items
+                          if not i.get("date") or i["date"] >= cutoff]
+            if before > len(push_items):
+                log(f"  按「近 {push_window} 天」窗口过滤掉 {before - len(push_items)} 条旧信息")
+            push_items.sort(key=lambda x: (x.get("date") or "", -x.get("match", x.get("score", 0))),
+                            reverse=True)
         if push_items:
             notify_mod.push_all(push_items, today_str(), stats, site_url())
         elif (cfg_sources.get("settings") or {}).get("push_heartbeat", True):

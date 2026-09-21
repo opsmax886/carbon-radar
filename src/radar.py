@@ -801,6 +801,29 @@ def fetch_article_meta(url: str, fetcher: "Fetcher", encoding: str | None = None
     return {"title": title, "source": source, "date": date, "snippet": snippet or ""}
 
 
+# 标题里出现这些词,说明这是一条"招投标公告",而不是市场资讯
+TENDER_TITLE_KW = ("招标公告", "采购公告", "中标公告", "成交公告", "竞争性磋商",
+                   "竞争性谈判", "询比", "询价", "比选", "征集公告", "公开招标",
+                   "邀请招标", "结果公告", "中标结果", "更正公告", "单一来源",
+                   "框架协议采购", "招标", "采购项目", "项目采购")
+
+
+def refine_category(kind: str, title: str) -> str:
+    """按标题内容判定这条到底是不是招投标信息。
+
+    为什么需要:有些源(如碳排放交易网的"碳交易/碳金融"栏目)整体标成 tender,
+    但里面大部分是市场资讯,直接混进"重点标讯"会很干扰阅读。
+    规则:
+      · 标题含招投标字眼 → 归为 tender(不管来源)
+      · 标着 tender 但标题毫无招投标字眼 → 其实是资讯,降为 news
+      · policy / methodology 保持不动(政策文件里出现"招标"不代表它是标讯)
+    """
+    has = any(k in title for k in TENDER_TITLE_KW)
+    if kind in ("tender", "news"):
+        return "tender" if has else "news"
+    return kind
+
+
 def guess_kind(text: str, default: str = "news") -> str:
     """从标题+正文片段猜归类,猜不准就用默认值。"""
     if any(h in text for h in METHOD_HINTS):
@@ -902,7 +925,8 @@ def build(cfg_sources: dict, kw: dict, force_all: bool = False) -> dict:
         it.update(sc)
         it["region"] = scorer.detect_region(it["title"], default_regions.get(it["source_id"], "未分类"))
         it["locality"] = scorer.detect_locality(it["title"]) or ""
-        it["category"] = it.get("kind", "news")
+        # 按标题内容重新判定是不是真的招投标公告(源头 kind 不够准)
+        it["category"] = refine_category(it.get("kind", "news"), it["title"])
         # 无日期的条目排后面
         it["_dated"] = 1 if it.get("date") else 0
         filtered.append(it)
