@@ -66,11 +66,18 @@ jobs:
           retention-days: 30
 
   # ============ 第二步:发布到 GitHub Pages(可选) ============
-  # ⚠️ 注意:免费版 GitHub 账号只能从【公开仓库】发布 Pages。
-  #    如果你的仓库是私有的,请把下面整个 deploy 任务删掉,
-  #    改为每天看钉钉推送 + 本地打开 web/index.html(先 git pull)。
+  # ⚠️ 免费版 GitHub 账号只能从【公开仓库】发布 Pages。
+  #    所以这里做了自动判断:
+  #      · 公开仓库  → 尝试发布网页看板
+  #      · 私有仓库  → 自动跳过(不会报错)
+  #    如果你还没在 Settings → Pages 里开通,这一步会失败但不影响整体,
+  #    continue-on-error 保证工作流仍然显示为成功(绿色)。
   deploy:
     needs: update
+    # 用 != 'private' 而不是 == 'public':万一取不到可见性,宁可尝试一次
+    # (失败了也被 continue-on-error 兜住),也不要永远静默不发布
+    if: github.event.repository.visibility != 'private'
+    continue-on-error: true
     runs-on: ubuntu-latest
     environment:
       name: github-pages
