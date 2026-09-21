@@ -1,0 +1,19 @@
+# 系统与编辑器
+.DS_Store
+Thumbs.db
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.idea/
+.vscode/
+
+# 个人本地配置(密钥不要提交!)
+config/local.yml
+.env
+
+# 注意:以下目录/文件【必须提交】,不要加进 .gitignore
+#   data/            —— 去重记忆 + 源健康状态,提交后明天才能识别"新增"
+#   data/history/    —— 历史存档,网页的日期切换靠它
+#   web/data.js      —— 网页数据(双击 index.html 时的数据来源)
+#   web/data.json    —— 网页数据(接口方式)

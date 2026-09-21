@@ -1,0 +1,92 @@
+name: 碳雷达每日更新
+
+# ---------------------------------------------------------------
+# 时区提醒:GitHub Actions 的 cron 用的是 UTC 时间!
+# 北京时间 07:00 = UTC 前一天 23:00,所以写 '0 23 * * *'
+# 想改成早上 8:30 -> '30 0 * * *'
+# ---------------------------------------------------------------
+on:
+  schedule:
+    - cron: '0 23 * * *'
+  workflow_dispatch:        # 也支持在网页上手动点一下立即运行
+
+permissions:
+  contents: write           # 需要写权限才能把新数据提交回仓库
+  pages: write
+  id-token: write
+
+concurrency:
+  group: carbon-radar
+  cancel-in-progress: false
+
+jobs:
+  # ============ 第一步:抓取 + 分析 + 推送 + 提交数据 ============
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 拉取代码
+        uses: actions/checkout@v4
+
+      - name: 安装 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 安装依赖
+        run: pip install -r requirements.txt
+
+      - name: 运行碳雷达
+        env:
+          # 以下密钥请在仓库 Settings → Secrets and variables → Actions 里配置
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          DINGTALK_WEBHOOK: ${{ secrets.DINGTALK_WEBHOOK }}
+          DINGTALK_SECRET: ${{ secrets.DINGTALK_SECRET }}
+          # 可选:企业微信 / 飞书
+          WECOM_WEBHOOK: ${{ secrets.WECOM_WEBHOOK }}
+          FEISHU_WEBHOOK: ${{ secrets.FEISHU_WEBHOOK }}
+        run: python src/main.py
+
+      - name: 提交更新后的数据
+        run: |
+          git config user.name  "carbon-radar-bot"
+          git config user.email "carbon-radar-bot@users.noreply.github.com"
+          git add -A
+          if git diff --staged --quiet; then
+            echo "数据无变化,跳过提交"
+          else
+            git commit -m "数据更新 $(TZ='Asia/Shanghai' date +'%Y-%m-%d %H:%M')"
+            git push
+          fi
+
+      - name: 保存网页产物(备用,可在 Actions 页面下载)
+        uses: actions/upload-artifact@v4
+        with:
+          name: carbon-radar-web
+          path: web/
+          retention-days: 30
+
+  # ============ 第二步:发布到 GitHub Pages(可选) ============
+  # ⚠️ 注意:免费版 GitHub 账号只能从【公开仓库】发布 Pages。
+  #    如果你的仓库是私有的,请把下面整个 deploy 任务删掉,
+  #    改为每天看钉钉推送 + 本地打开 web/index.html(先 git pull)。
+  deploy:
+    needs: update
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: 拉取最新提交(含刚推送的数据)
+        uses: actions/checkout@v4
+
+      - name: 配置 Pages
+        uses: actions/configure-pages@v5
+
+      - name: 打包 web 目录
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: web
+
+      - name: 发布
+        id: deployment
+        uses: actions/deploy-pages@v4

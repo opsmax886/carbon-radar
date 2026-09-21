@@ -1,0 +1,238 @@
+# ============================================================
+# 碳雷达 · 数据源配置
+# ------------------------------------------------------------
+# 全部为免费公开源。每个源都标注了实测状态(2026-09 实测)。
+#
+# 添加新源只需在下面加一段,不需要改任何代码。
+# 详细说明见 docs/数据源接入指南.md
+#
+# adapter 类型:
+#   html_list  —— 通用列表页解析(靠 link_filter 正则筛链接),
+#                 日期优先从 URL 里提取(最稳定,不受页面改版影响)
+#   rss        —— 标准 RSS/Atom 订阅
+#   zcy_json   —— 政采云 JSON 接口(多省共用,需正确分类参数)
+#   manual     —— 占位,暂不抓取(用于记录"已知但难啃"的源)
+# ============================================================
+
+settings:
+  request_delay_seconds: 3      # 同一域名两次请求之间至少间隔,避免被封
+  timeout_seconds: 25
+  retries: 3
+  max_items_per_source: 60      # 每个源最多取多少条
+  max_age_days: 120             # 超过这个天数的旧条目直接丢弃(过期标讯无价值)
+                                # 设为 0 表示不限制。无日期的条目不受影响。
+  push_heartbeat: true          # 当天无新增时,也推一条"平安消息"
+                                # 否则你无法区分"今天真没标讯"和"系统挂了"
+                                # 改成 false 则完全静默
+  user_agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
+  # 源连续失败多少天算"疑似失效",会在页面顶部告警
+  stale_alert_days: 14
+
+sources:
+
+  # ==========================================================
+  # 一、招投标信息(核心商机)
+  # ==========================================================
+
+  - id: tanpaifang_tanpancha
+    name: 碳排放交易网·碳盘查
+    kind: tender
+    adapter: html_list
+    url: http://www.tanpaifang.com/tanpancha/
+    base: http://www.tanpaifang.com/tanpancha/
+    link_filter: '/tanpancha/\d{4}/\d{4}/\d+\.html'
+    encoding: utf-8
+    enabled: true
+    status: 实测可用 —— 已在聚合全国碳核查/清单编制类招标,性价比最高的标讯源
+    note: 最新内容可能滞后 1-2 个月,系统会自动显示"最后更新日期"提醒你
+
+  - id: tanpaifang_tanjiaoyi
+    name: 碳排放交易网·碳交易
+    kind: tender
+    adapter: html_list
+    url: http://www.tanpaifang.com/tanjiaoyi/
+    base: http://www.tanpaifang.com/tanjiaoyi/
+    link_filter: '/tanjiaoyi/\d{4}/\d{4}/\d+\.html'
+    encoding: utf-8
+    enabled: true
+    status: 实测可用
+
+  - id: tanpaifang_tanjinrong
+    name: 碳排放交易网·碳金融
+    kind: tender
+    adapter: html_list
+    url: http://www.tanpaifang.com/tanjinrong/
+    base: http://www.tanpaifang.com/tanjinrong/
+    link_filter: '/tanjinrong/\d{4}/\d{4}/\d+\.html'
+    encoding: utf-8
+    enabled: true
+    status: 实测可用
+
+  - id: ideacarbon_tender
+    name: 全国碳市场信息网·行业招标
+    kind: tender
+    default_region: 全国
+    adapter: html_list
+    url: http://www.ideacarbon.org/header_tab/33/?pc=pc
+    base: http://www.ideacarbon.org/
+    link_filter: '/news_free/\d+/'
+    encoding: utf-8
+    enabled: false
+    status: 实测可访问,但栏目内容停留在 2022 年,已停更 —— 默认关闭
+    note: 若你发现恢复更新,把 enabled 改成 true 即可
+
+  - id: hebei_ggzy
+    name: 湖北省公共资源交易中心
+    kind: tender
+    adapter: html_list
+    url: http://www.hbggzyfwpt.cn/
+    base: http://www.hbggzyfwpt.cn/
+    link_filter: '/(jyxx|ggzy|qtzb|zfcg).*\.(html|jsp|do)'
+    encoding: utf-8
+    enabled: false
+    status: 首页实测可访问,但列表接口为 POST + JS 渲染,需单独适配
+    note: 已加入待接入清单,见 docs/数据源接入指南.md
+
+  - id: ccgp
+    name: 中国政府采购网
+    kind: tender
+    default_region: 全国
+    adapter: manual
+    url: https://search.ccgp.gov.cn/bxsearch
+    enabled: false
+    status: ❌ 实测触发反爬("您的访问过于频繁"),不直连
+    note: 覆盖最全但反爬最严;若后期需要,建议购买商业标讯API(剑鱼/千里马)
+
+  # ==========================================================
+  # 二、政策法规(官方权威)
+  # ==========================================================
+
+  - id: mee_climate
+    name: 生态环境部·应对气候变化司
+    kind: policy
+    default_region: 全国
+    adapter: html_list
+    url: https://www.mee.gov.cn/ywgz/ydqhbh/
+    base: https://www.mee.gov.cn/ywgz/ydqhbh/
+    link_filter: '/ywgz/ydqhbh/[a-z]+/\d{6}/t\d{8}_\d+\.s?html'
+    encoding: utf-8
+    enabled: true
+    status: 实测可用 —— 双碳政策第一手来源,优先级最高
+
+  - id: mee_wsq
+    name: 生态环境部·温室气体控制
+    kind: policy
+    default_region: 全国
+    adapter: html_list
+    url: https://www.mee.gov.cn/ywgz/ydqhbh/wsqtkz/
+    base: https://www.mee.gov.cn/ywgz/ydqhbh/wsqtkz/
+    link_filter: '/ywgz/ydqhbh/wsqtkz/\d{6}/t\d{8}_\d+\.s?html'
+    encoding: utf-8
+    enabled: true
+    status: 实测可用 —— CCER 方法学发布的主渠道
+
+  - id: mee_zbfb
+    name: 生态环境部·新闻发布会
+    kind: policy
+    default_region: 全国
+    adapter: html_list
+    url: https://www.mee.gov.cn/ywdt/zbft/
+    base: https://www.mee.gov.cn/ywdt/zbft/
+    link_filter: '/ywdt/zbft/\d{6}/t\d{8}_\d+\.s?html'
+    encoding: utf-8
+    enabled: true
+    status: 实测可用
+
+  - id: gov_policy
+    name: 中国政府网·政策
+    kind: policy
+    default_region: 全国
+    adapter: html_list
+    url: https://www.gov.cn/zhengce/
+    base: https://www.gov.cn/
+    link_filter: 'content_\d+\.htm'
+    encoding: utf-8
+    enabled: true
+    status: 实测可用 —— 国务院/国办层级文件
+
+  - id: ndrc
+    name: 国家发展改革委
+    kind: policy
+    default_region: 全国
+    adapter: html_list
+    url: https://www.ndrc.gov.cn/xwdt/
+    base: https://www.ndrc.gov.cn/
+    link_filter: '/\d{6}/t\d{8}_\d+\.html'
+    encoding: utf-8
+    enabled: true
+    status: 实测首页可用 —— 双碳顶层政策、能耗双控
+
+  # ==========================================================
+  # 三、市场动态(交易所 + 行业媒体)
+  # ==========================================================
+
+  - id: cbeex
+    name: 北京绿色交易所
+    kind: news
+    adapter: html_list
+    url: https://www.cbeex.com.cn/
+    base: https://www.cbeex.com.cn/
+    link_filter: '/(article|news|detail|content).*'
+    encoding: utf-8
+    enabled: false
+    status: ❌ 实测站点显示"网站维护中",无内容可抓 —— 已关闭
+    note: 北京绿交所是 CCER 权威渠道,待其恢复后把 enabled 改回 true 即可
+
+  - id: greenfinance
+    name: 中国金融学会绿色金融专业委员会
+    kind: news
+    max_items: 30
+    default_region: 全国
+    adapter: html_list
+    url: http://www.greenfinance.org.cn/
+    base: http://www.greenfinance.org.cn/
+    link_filter: '\.php'
+    encoding: utf-8
+    enabled: true
+    status: 实测可用 —— 绿色金融/转型金融政策与报告
+
+  - id: bjx_carbon
+    name: 北极星电力网·碳
+    kind: news
+    adapter: html_list
+    url: https://news.bjx.com.cn/tan/
+    base: https://news.bjx.com.cn/
+    link_filter: '/news/\d+/\d+\.s?html'
+    encoding: utf-8
+    enabled: false
+    status: ❌ 实测阿里云 WAF + 滑块验证码拦截,不直连
+    note: 若需北极星内容,可通过其 RSS 或搜索引擎间接获取
+
+  - id: tanjiaoyi_com
+    name: 中国碳交易网
+    kind: news
+    max_items: 25
+    adapter: html_list
+    url: http://www.tanjiaoyi.com/
+    base: http://www.tanjiaoyi.com/
+    link_filter: 'article-\d+-\d+\.html'
+    encoding: utf-8
+    enabled: true
+    status: 实测可用
+
+  # ==========================================================
+  # 四、方法学与标准(单独跟踪,高频更新)
+  # ==========================================================
+
+  - id: mee_methodology
+    name: 生态环境部·方法学与标准
+    kind: methodology
+    default_region: 全国
+    adapter: html_list
+    url: https://www.mee.gov.cn/ywgz/ydqhbh/wsqtkz/
+    base: https://www.mee.gov.cn/ywgz/ydqhbh/wsqtkz/
+    link_filter: '/ywgz/ydqhbh/wsqtkz/\d{6}/t\d{8}_\d+\.s?html'
+    encoding: utf-8
+    enabled: true
+    status: 实测可用 —— 与 mee_wsq 同源,但单独归类到"方法学"标签,便于你只盯方法学更新
+    note: 2025 年生态环境部集中发布了 12 项自愿减排方法学,此栏目务必高频关注

@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>碳雷达 · 双碳招投标与资讯聚合</title>
+<style>
+  :root{
+    --bg:#f4f6f9; --panel:#fff; --line:#dfe4ec; --line2:#eef1f6;
+    --txt:#1c2530; --txt2:#5b6779; --txt3:#8c97a8;
+    --brand:#1f6feb; --brand-d:#1554c0;
+    --hot:#dc2626; --warm:#d97706; --cool:#0891b2; --ok:#16a34a;
+    --shadow:0 1px 3px rgba(16,24,40,.06),0 1px 2px rgba(16,24,40,.04);
+    --shadow-lg:0 8px 26px rgba(16,24,40,.13),0 2px 8px rgba(16,24,40,.07);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font:14px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    color:var(--txt);background:var(--bg);
+  }
+  button,input,select{font:inherit;color:inherit}
+  button{cursor:pointer}
+  a{color:var(--brand);text-decoration:none}
+  a:hover{text-decoration:underline}
+
+  /* ---------- 顶栏 ---------- */
+  header{background:#101828;color:#fff;padding:14px 18px;position:sticky;top:0;z-index:20;
+         box-shadow:0 2px 10px rgba(16,24,40,.18)}
+  .hrow{display:flex;align-items:center;gap:14px;flex-wrap:wrap;max-width:1400px;margin:0 auto}
+  .logo{font-weight:700;font-size:17px;letter-spacing:.4px;white-space:nowrap}
+  .logo em{font-style:normal;color:#7cc4ff}
+  .gen{color:#93a3b8;font-size:12.5px}
+  .stats{display:flex;gap:8px;margin-left:auto;flex-wrap:wrap}
+  .stat{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.14);
+        border-radius:8px;padding:4px 11px;font-size:12.5px;white-space:nowrap}
+  .stat b{font-size:15px;margin-right:3px}
+  .stat.hot b{color:#ff8a8a}.stat.pol b{color:#ffd479}.stat.new b{color:#7ee2a8}
+
+  /* ---------- 工具栏 ---------- */
+  .toolbar{background:var(--panel);border-bottom:1px solid var(--line);position:sticky;top:58px;z-index:15}
+  .trow{display:flex;align-items:center;gap:10px;padding:10px 18px;max-width:1400px;margin:0 auto;flex-wrap:wrap}
+  .search{position:relative;flex:1 1 230px;min-width:180px}
+  .search input{width:100%;padding:8px 12px 8px 32px;border:1px solid var(--line);border-radius:8px;background:#fbfcfe}
+  .search input:focus{outline:none;border-color:var(--brand);background:#fff;
+                      box-shadow:0 0 0 3px rgba(31,111,235,.12)}
+  .search::before{content:"🔍";position:absolute;left:10px;top:50%;transform:translateY(-50%);
+                  font-size:12px;opacity:.55}
+  select{padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:#fbfcfe;max-width:180px}
+  .seg{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fbfcfe}
+  .seg button{border:0;background:transparent;padding:7px 13px;font-size:13px;color:var(--txt2);
+              border-right:1px solid var(--line)}
+  .seg button:last-child{border-right:0}
+  .seg button.on{background:var(--brand);color:#fff;font-weight:600}
+  .chk{display:flex;align-items:center;gap:5px;font-size:13px;color:var(--txt2);white-space:nowrap;
+       padding:7px 11px;border:1px solid var(--line);border-radius:8px;background:#fbfcfe;cursor:pointer}
+  .chk input{accent-color:var(--brand);margin:0}
+
+  /* ---------- 源健康面板 ---------- */
+  .health{max-width:1400px;margin:0 auto;padding:0 18px}
+  .hbox{background:#fff;border:1px solid var(--line);border-radius:10px;margin:12px 0;overflow:hidden}
+  .hhead{padding:9px 14px;font-size:13px;font-weight:600;cursor:pointer;display:flex;
+         align-items:center;gap:8px;user-select:none}
+  .hhead:hover{background:#fafbfd}
+  .hhead .arrow{transition:transform .18s;font-size:10px;color:var(--txt3)}
+  .hbox.open .arrow{transform:rotate(90deg)}
+  .hbody{display:none;border-top:1px solid var(--line2);padding:6px 14px 12px}
+  .hbox.open .hbody{display:block}
+  .srow{display:flex;align-items:center;gap:9px;padding:5px 0;font-size:12.5px;border-bottom:1px dashed var(--line2)}
+  .srow:last-child{border-bottom:0}
+  .dot{width:7px;height:7px;border-radius:50%;flex:0 0 auto}
+  .dot.ok{background:var(--ok)}.dot.bad{background:var(--hot)}
+  .dot.off{background:#c3cbd8}.dot.warn{background:var(--warm)}
+  .sname{flex:0 0 190px;font-weight:500}
+  .sdesc{color:var(--txt2);flex:1}
+  .badge{border-radius:5px;padding:1px 7px;font-size:11.5px;font-weight:600;white-space:nowrap}
+  .b-hot{background:#fee2e2;color:#b91c1c}.b-warm{background:#fef3c7;color:#b45309}
+  .b-cool{background:#e0f2fe;color:#0369a1}.b-mut{background:#eef1f6;color:#64748b}
+  .b-new{background:#dcfce7;color:#15803d}
+
+  /* ---------- 列表 ---------- */
+  main{max-width:1400px;margin:0 auto;padding:6px 18px 60px}
+  .notice{background:#fffbeb;border:1px solid #fde68a;color:#92400e;border-radius:9px;
+          padding:10px 14px;margin:12px 0;font-size:13px}
+  .region{margin:16px 0 6px}
+  .rhead{display:flex;align-items:center;gap:9px;font-weight:600;font-size:14px;
+         padding:7px 0;cursor:pointer;user-select:none}
+  .rhead:hover{color:var(--brand-d)}
+  .rhead .cnt{font-weight:400;color:var(--txt3);font-size:12.5px}
+  .rhead .arrow{font-size:9px;color:var(--txt3);transition:transform .18s}
+  .region.closed .arrow{transform:rotate(-90deg)}
+  .region.closed .items{display:none}
+
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;
+        padding:12px 14px;margin-bottom:9px;box-shadow:var(--shadow);transition:.15s}
+  .card:hover{box-shadow:var(--shadow-lg);border-color:#c9d6ea;transform:translateY(-1px)}
+  .ctop{display:flex;gap:10px;align-items:flex-start}
+  .score{flex:0 0 auto;min-width:46px;text-align:center;border-radius:8px;padding:5px 6px;
+         font-weight:700;font-size:15px;line-height:1.15}
+  .score small{display:block;font-size:9.5px;font-weight:500;opacity:.8}
+  .s-hot{background:#fee2e2;color:#b91c1c}.s-warm{background:#fef3c7;color:#b45309}
+  .s-mid{background:#e0f2fe;color:#0369a1}.s-low{background:#eef1f6;color:#64748b}
+  .ctitle{flex:1;font-size:14.5px;font-weight:600;line-height:1.45}
+  .ctitle a{color:var(--txt)}
+  .ctitle a:hover{color:var(--brand);text-decoration:none}
+  .meta{color:var(--txt3);font-size:12.3px;margin-top:4px;display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+  .summary{margin-top:7px;color:#334155;font-size:13.3px;background:#f8fafc;
+           border-left:3px solid var(--brand);padding:6px 10px;border-radius:0 6px 6px 0}
+  .reason{color:var(--txt2);font-size:12.3px;margin-top:5px}
+  .chips{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}
+  .chip{background:#eef1f6;color:#475569;border-radius:5px;padding:1px 7px;font-size:11.5px}
+  .empty{text-align:center;color:var(--txt3);padding:70px 20px;font-size:14px}
+  footer{text-align:center;color:var(--txt3);font-size:12px;padding:22px 18px 40px}
+  @media(max-width:640px){
+    .stats{width:100%;margin-left:0}.stat{font-size:12px;padding:3px 9px}
+    .sname{flex:0 0 120px}.logo{font-size:15px}
+    .toolbar{top:0;position:static}header{position:static}
+    select{max-width:100%;flex:1}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="hrow">
+    <div class="logo">碳<em>雷达</em></div>
+    <div class="gen" id="gen"></div>
+    <div class="stats" id="stats"></div>
+  </div>
+</header>
+
+<div class="toolbar">
+  <div class="trow">
+    <div class="search"><input id="q" type="search" placeholder="搜索标题、摘要、关键词…（如：核查、清单编制、零碳园区）"></div>
+    <div class="seg" id="cats">
+      <button data-cat="all" class="on">全部</button>
+      <button data-cat="tender">招投标</button>
+      <button data-cat="policy">政策</button>
+      <button data-cat="methodology">方法学</button>
+      <button data-cat="news">动态</button>
+    </div>
+    <select id="region"><option value="all">全部地区</option></select>
+    <select id="track"><option value="all">全部业务线</option></select>
+    <select id="sort">
+      <option value="score">按匹配度排序</option>
+      <option value="date">按日期排序</option>
+    </select>
+    <label class="chk"><input type="checkbox" id="onlynew"> 只看今日新增</label>
+    <label class="chk"><input type="checkbox" id="onlytender"> 仅看标讯</label>
+  </div>
+</div>
+
+<div class="health">
+  <div class="hbox open" id="hbox">
+    <div class="hhead" id="hhead"><span class="arrow">▶</span><span id="htitle">数据源状态</span></div>
+    <div class="hbody" id="hbody"></div>
+  </div>
+</div>
+
+<main id="main"><div class="empty">正在加载数据…</div></main>
+<footer id="foot"></footer>
+
+<!-- 优先使用内嵌数据（让本文件双击即可打开，无需服务器）；失败则回退到 fetch -->
+<script src="data.js" onerror="window.__NO_EMBED__=true"></script>
+<script>
+(function(){
+  var DATA = window.__CARBON_DATA__ || null;
+  var CAT_LABEL = {tender:'招投标', policy:'政策', methodology:'方法学', news:'动态'};
+
+  function boot(){
+    if(!DATA && !window.__NO_EMBED__){
+      fetch('data.json').then(function(r){return r.json()}).then(function(j){
+        DATA=j; initControls(); render();
+      }).catch(showLoadError);
+    } else if(DATA){ render(); } else { showLoadError(); }
+  }
+  function showLoadError(){
+    document.getElementById('main').innerHTML =
+      '<div class="empty">未能加载数据。<br><br>请先运行 <code>python src/main.py</code> 生成 data.js，'+
+      '<br>或确认 data.js / data.json 与本文件在同一目录。</div>';
+  }
+
+  // 汇总所有天的条目（默认展示最新一天）
+  var state = {cat:'all', region:'all', track:'all', sort:'score',
+               q:'', onlynew:false, onlytender:false, day:null};
+
+  function allItems(){
+    var days = (DATA.days||[]);
+    if(!days.length) return [];
+    var d = state.day ? days.filter(function(x){return x.date===state.day})[0] : days[0];
+    return (d && d.items) || [];
+  }
+  function currentDay(){
+    var days=(DATA.days||[]); return days.length? (state.day||days[0].date) : null;
+  }
+
+  function scoreClass(s){ return s>=80?'s-hot': s>=60?'s-warm': s>=35?'s-mid':'s-low'; }
+
+  function match(it){
+    if(state.cat!=='all' && it.category!==state.cat) return false;
+    if(state.region!=='all' && (it.region||'未分类')!==state.region) return false;
+    if(state.track!=='all' && (it.track||'')!==state.track) return false;
+    if(state.onlynew && !it.is_new) return false;
+    if(state.onlytender && it.category!=='tender') return false;
+    if(state.q){
+      var q=state.q.toLowerCase();
+      var hay=(it.title+' '+(it.summary||'')+' '+(it.matched||[]).join(' ')+' '+(it.source_name||'')+' '+(it.locality||'')).toLowerCase();
+      if(hay.indexOf(q)<0) return false;
+    }
+    return true;
+  }
+
+  function render(){
+    var items = allItems().filter(match);
+
+    // 排序
+    items.sort(function(a,b){
+      if(state.sort==='date'){
+        var da=a.date||'', db=b.date||'';
+        if(da!==db) return db.localeCompare(da);
+        return (b.match||b.score||0)-(a.match||a.score||0);
+      }
+      var d=(b.match||b.score||0)-(a.match||a.score||0);
+      if(d) return d;
+      return (b.date||'').localeCompare(a.date||'');
+    });
+
+    // 统计
+    var st = DATA.stats||{};
+    document.getElementById('gen').textContent = '更新于 ' + (DATA.generated_at||'-') + (currentDay()? ' · 数据日 '+currentDay():'');
+    document.getElementById('stats').innerHTML =
+      '<div class="stat new"><b>'+items.length+'</b>当前显示</div>'+
+      '<div class="stat hot"><b>'+(st.tenders!=null?st.tenders:'-')+'</b>标讯</div>'+
+      '<div class="stat pol"><b>'+(st.policies!=null?st.policies:'-')+'</b>政策/方法学</div>'+
+      '<div class="stat"><b>'+(st.new!=null?st.new:'-')+'</b>今日新增</div>';
+
+    renderHealth();
+
+    var main = document.getElementById('main');
+    if(!items.length){
+      main.innerHTML = '<div class="empty">没有符合条件的信息。<br><br>试试清空搜索词或切换地区/分类。</div>';
+      return;
+    }
+
+    var groups = {};
+    items.forEach(function(it){
+      var r = it.region || '未分类';
+      (groups[r] = groups[r]||[]).push(it);
+    });
+    // 地区排序：全国/未分类置后，其余按条数降序
+    var keys = Object.keys(groups).sort(function(a,b){
+      var pa = (a==='全国')?2:(a==='未分类'?3:1), pb=(b==='全国')?2:(b==='未分类'?3:1);
+      if(pa!==pb) return pa-pb;
+      return groups[b].length-groups[a].length;
+    });
+
+    var html = '';
+    var stale = (st.stale_sources||[]);
+    if(stale.length){
+      html += '<div class="notice">⚠️ <b>数据源告警</b>：'+stale.join('；')+
+              '<br>建议检查这些站点是否改版，或把它们从 config/sources.yml 中关闭。</div>';
+    }
+
+    keys.forEach(function(k){
+      var arr = groups[k];
+      html += '<section class="region" data-r="'+esc(k)+'">'+
+        '<div class="rhead"><span class="arrow">▼</span>'+esc(k)+
+        ' <span class="cnt">'+arr.length+' 条</span></div><div class="items">';
+      arr.forEach(function(it){ html += card(it); });
+      html += '</div></section>';
+    });
+    main.innerHTML = html;
+
+    // 折叠交互
+    main.querySelectorAll('.rhead').forEach(function(h){
+      h.onclick=function(){ h.parentNode.classList.toggle('closed'); };
+    });
+  }
+
+  function card(it){
+    var s = it.match!=null?it.match:(it.score||0);
+    var chips = (it.matched||[]).slice(0,7).map(function(m){return '<span class="chip">'+esc(m)+'</span>'}).join('');
+    if(it.also_on && it.also_on.length){
+      chips += '<span class="chip" title="多个来源都收录了这条信息">多源: '+esc(it.also_on.join('/'))+'</span>';
+    }
+    var meta = [];
+    if(it.locality) meta.push(esc(it.locality));
+    if(it.date) meta.push(esc(it.date));
+    if(it.source_name) meta.push(esc(it.source_name));
+    var cat = CAT_LABEL[it.category]||it.category||'';
+    var badges = '';
+    if(it.is_new) badges += '<span class="badge b-new">今日新增</span> ';
+    if(it.track_label) badges += '<span class="badge b-cool">'+esc(it.track_label)+'</span> ';
+    if(cat) badges += '<span class="badge b-mut">'+esc(cat)+'</span>';
+
+    return '<article class="card">'+
+      '<div class="ctop">'+
+        '<div class="score '+scoreClass(s)+'">'+s+'<small>匹配度</small></div>'+
+        '<div class="ctitle">'+
+          '<a href="'+esc(it.url)+'" target="_blank" rel="noopener">'+esc(it.title)+'</a>'+
+          '<div class="meta">'+meta.join(' · ')+'</div>'+
+        '</div>'+
+      '</div>'+
+      (it.summary? '<div class="summary">'+esc(it.summary)+'</div>':'')+
+      (it.reason? '<div class="reason">💡 '+esc(it.reason)+'</div>':'')+
+      (badges||chips? '<div class="chips">'+badges+chips+'</div>':'')+
+    '</article>';
+  }
+
+  function renderHealth(){
+    var srcs = DATA.sources||[];
+    var on = srcs.filter(function(s){return s.enabled});
+    var bad = on.filter(function(s){return (s.consecutive_failures||0)>0});
+    document.getElementById('htitle').textContent =
+      '数据源状态：'+on.length+' 个启用 · '+(bad.length? bad.length+' 个异常':'全部正常');
+    var html='';
+    srcs.forEach(function(s){
+      var cls = !s.enabled?'off' : (s.consecutive_failures>0?'bad':'ok');
+      var txt = !s.enabled?'已关闭' :
+        (s.consecutive_failures>0? ('连续失败 '+s.consecutive_failures+' 次')
+         : ('最近成功 '+(s.last_success||'-')+' · '+(s.last_count!=null?s.last_count+' 条':'')));
+      html += '<div class="srow">'+
+        '<span class="dot '+cls+'"></span>'+
+        '<span class="sname">'+esc(s.name)+'</span>'+
+        '<span class="sdesc">'+esc(s.status||s.note||'')+'</span>'+
+        '<span class="badge '+(cls==='ok'?'b-cool':cls==='bad'?'b-hot':'b-mut')+'">'+esc(txt)+'</span>'+
+      '</div>';
+    });
+    document.getElementById('hbody').innerHTML = html || '<div class="srow">暂无数据</div>';
+  }
+
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+
+  // 初始化下拉
+  function initControls(){
+    var items = [];
+    (DATA.days||[]).forEach(function(d){ items = items.concat(d.items||[]); });
+    var regions = {}, tracks = {};
+    items.forEach(function(it){
+      regions[it.region||'未分类'] = 1;
+      if(it.track) tracks[it.track] = it.track_label||it.track;
+    });
+    var rs = Object.keys(regions).sort();
+    var rsel = document.getElementById('region');
+    rs.forEach(function(r){ rsel.insertAdjacentHTML('beforeend','<option>'+esc(r)+'</option>'); });
+    var tsel = document.getElementById('track');
+    Object.keys(tracks).forEach(function(t){
+      tsel.insertAdjacentHTML('beforeend','<option value="'+esc(t)+'">'+esc(tracks[t])+'</option>');
+    });
+    // 历史日期切换
+    if((DATA.days||[]).length>1){
+      var dsel = document.createElement('select');
+      dsel.innerHTML = (DATA.days||[]).map(function(d){
+        return '<option value="'+esc(d.date)+'">'+esc(d.date)+' ('+(d.items||[]).length+')</option>'; }).join('');
+      dsel.onchange=function(){ state.day=this.value; render(); };
+      document.querySelector('.trow').insertBefore(dsel, document.getElementById('sort'));
+    }
+  }
+
+  document.getElementById('q').oninput = function(){ state.q=this.value.trim(); render(); };
+  document.getElementById('region').onchange = function(){ state.region=this.value; render(); };
+  document.getElementById('track').onchange = function(){ state.track=this.value; render(); };
+  document.getElementById('sort').onchange = function(){ state.sort=this.value; render(); };
+  document.getElementById('onlynew').onchange = function(){ state.onlynew=this.checked; render(); };
+  document.getElementById('onlytender').onchange = function(){ state.onlytender=this.checked; render(); };
+  document.getElementById('cats').onclick = function(e){
+    var b=e.target.closest('button'); if(!b) return;
+    this.querySelectorAll('button').forEach(function(x){x.classList.remove('on')});
+    b.classList.add('on'); state.cat=b.dataset.cat; render();
+  };
+  document.getElementById('hhead').onclick = function(){
+    document.getElementById('hbox').classList.toggle('open');
+  };
+
+  if(DATA){ initControls(); }
+  document.getElementById('foot').textContent = '碳雷达 · 数据来自各公开来源，仅作信息聚合，请以原始发布页面为准';
+
+  // 等待 data.js 或 fetch
+  if(DATA){ render(); } else { boot(); }
+  // data.js 是同步加载的，若尚未赋值则走 fetch 回退
+  window.addEventListener('load', function(){ if(!DATA && window.__CARBON_DATA__){ DATA=window.__CARBON_DATA__; initControls(); render(); } });
+})();
+</script>
+</body>
+</html>

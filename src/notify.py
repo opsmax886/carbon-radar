@@ -1,0 +1,162 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+碳雷达 · 机器人推送
+============================================================
+已实现:钉钉群机器人(默认)、企业微信群机器人、飞书群机器人。
+只需要在环境变量里填 webhook 地址即可,没填就自动跳过推送。
+
+钉钉加签说明:
+  若机器人安全设置选了"加签",把密钥填到 DINGTALK_SECRET;
+  若选的是"自定义关键词",建议设为"碳雷达",并把标题带上该词。
+"""
+from __future__ import annotations
+
+import base64
+import hashlib
+import hmac
+import json
+import os
+import time
+import urllib.parse
+import urllib.request
+
+
+def _http_post(url: str, payload: dict, timeout: int = 20) -> str:
+    req = urllib.request.Request(url, data=json.dumps(payload).encode("utf-8"),
+                                headers={"Content-Type": "application/json"}, method="POST")
+    with urllib.request.urlopen(req, timeout=timeout) as r:
+        return r.read().decode("utf-8", errors="ignore")
+
+
+def _sign_dingtalk(url: str, secret: str) -> str:
+    ts = str(round(time.time() * 1000))
+    string_to_sign = f"{ts}\n{secret}"
+    h = hmac.new(secret.encode("utf-8"), string_to_sign.encode("utf-8"), digestmod=hashlib.sha256).digest()
+    sign = urllib.parse.quote_plus(base64.b64encode(h))
+    joiner = "&" if "?" in url else "?"
+    return f"{url}{joiner}timestamp={ts}&sign={sign}"
+
+
+def build_markdown(items: list[dict], date_str: str, stats: dict, site_url: str = "") -> tuple[str, str]:
+    """生成推送正文。返回 (标题, markdown文本)。"""
+    title = f"碳雷达 · {date_str}"
+    lines: list[str] = []
+    tenders = [i for i in items if i.get("category") == "tender"]
+    policies = [i for i in items if i.get("category") in ("policy", "methodology")]
+
+    lines.append(f"## 碳雷达 · {date_str}")
+    lines.append(f"> 今日新增 **{stats.get('new', len(items))}** 条 | "
+                 f"标讯 {len(tenders)} · 政策 {len(policies)} · 总库 {stats.get('total', len(items))} 条")
+    lines.append("")
+
+    def block(head: str, subset: list[dict], n: int = 8) -> None:
+        if not subset:
+            return
+        lines.append(f"### {head}")
+        for it in sorted(subset, key=lambda x: -x.get("match", x.get("score", 0)))[:n]:
+            score = it.get("match", it.get("score", 0))
+            star = "🔥" if score >= 80 else ("⭐" if score >= 60 else "·")
+            region = it.get("region", "")
+            date = it.get("date") or ""
+            summary = (it.get("summary") or "").strip()
+            lines.append(f"{star} **[{score}分] {it['title']}**")
+            meta = " · ".join(x for x in [region, date, it.get("source_name", "")] if x)
+            if meta:
+                lines.append(f"　　{meta}")
+            if summary:
+                lines.append(f"　　{summary}")
+            lines.append(f"　　[查看原文]({it['url']})")
+        lines.append("")
+
+    block("🎯 重点标讯", tenders, 8)
+    block("📜 政策与方法学", policies, 6)
+    block("📰 市场动态", [i for i in items if i.get("category") == "news"], 5)
+
+    stale = stats.get("stale_sources") or []
+    if stale:
+        lines.append("---")
+        lines.append(f"⚠️ 以下来源疑似停止更新,请留意: {'、'.join(stale)}")
+    if site_url:
+        lines.append("")
+        lines.append(f"[👉 打开完整看板]({site_url})")
+    return title, "\n".join(lines)
+
+
+def push_dingtalk(title: str, markdown: str) -> bool:
+    url = os.environ.get("DINGTALK_WEBHOOK", "").strip()
+    if not url:
+        print("  · 未配置 DINGTALK_WEBHOOK,跳过钉钉推送")
+        return False
+    secret = os.environ.get("DINGTALK_SECRET", "").strip()
+    if secret:
+        url = _sign_dingtalk(url, secret)
+    payload = {"msgtype": "markdown", "markdown": {"title": title, "text": markdown}}
+    try:
+        body = _http_post(url, payload)
+        ok = '"errcode":0' in body.replace(" ", "")
+        print(f"  {'✓' if ok else '✗'} 钉钉推送{'成功' if ok else '失败: ' + body[:150]}")
+        return ok
+    except Exception as e:  # noqa: BLE001
+        print(f"  ✗ 钉钉推送异常: {str(e)[:120]}")
+        return False
+
+
+def push_wecom(title: str, markdown: str) -> bool:
+    url = os.environ.get("WECOM_WEBHOOK", "").strip()
+    if not url:
+        return False
+    try:
+        body = _http_post(url, {"msgtype": "markdown", "markdown": {"content": markdown}})
+        print(f"  ✓ 企业微信推送返回: {body[:120]}")
+        return True
+    except Exception as e:  # noqa: BLE001
+        print(f"  ✗ 企业微信推送异常: {str(e)[:120]}")
+        return False
+
+
+def push_feishu(title: str, markdown: str) -> bool:
+    url = os.environ.get("FEISHU_WEBHOOK", "").strip()
+    if not url:
+        return False
+    try:
+        body = _http_post(url, {"msg_type": "text", "content": {"text": f"{title}\n{markdown}"}})
+        print(f"  ✓ 飞书推送返回: {body[:120]}")
+        return True
+    except Exception as e:  # noqa: BLE001
+        print(f"  ✗ 飞书推送异常: {str(e)[:120]}")
+        return False
+
+
+def push_all(items: list[dict], date_str: str, stats: dict, site_url: str = "") -> None:
+    if not items:
+        push_heartbeat(date_str, stats, site_url)
+        return
+    title, md = build_markdown(items, date_str, stats, site_url)
+    push_dingtalk(title, md)
+    push_wecom(title, md)
+    push_feishu(title, md)
+
+
+def push_heartbeat(date_str: str, stats: dict, site_url: str = "") -> None:
+    """当天无新增时发一条简短的平安消息。
+
+    没有这条消息,你无法区分"今天确实没有新标讯"和"抓取脚本已经挂了很多天"。
+    对监控类工具来说,沉默是最危险的状态。
+    """
+    online = stats.get("sources_ok")
+    lines = [f"## 碳雷达 · {date_str}", "",
+             f"今日**无新增**信息(总库 {stats.get('total', '-')} 条)。",
+             f"系统运行正常" + (f",{online} 个数据源在线。" if online else "。")]
+    stale = stats.get("stale_sources") or []
+    if stale:
+        lines.append("")
+        lines.append(f"⚠️ 疑似停更: {'、'.join(stale)}")
+    if site_url:
+        lines.append("")
+        lines.append(f"[👉 打开完整看板]({site_url})")
+    title = f"碳雷达 · {date_str} 无新增"
+    md = "\n".join(lines)
+    push_dingtalk(title, md)
+    push_wecom(title, md)
+    push_feishu(title, md)
