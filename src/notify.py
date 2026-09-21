@@ -78,7 +78,7 @@ def build_markdown(items: list[dict], date_str: str, stats: dict, site_url: str 
             if region in ("未分类", ""):
                 region = ""
             meta = " ｜ ".join(x for x in [region, it.get("source_name", ""), it.get("date") or ""] if x)
-            line = f"{star} **[{score}分]** [{it['title']}]({it['url']})"
+            line = f"{star} [{it['title']}]({it['url']})"
             if meta:
                 line += f" ｜ {meta}"
             lines.append(line)
