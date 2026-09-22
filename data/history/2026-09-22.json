@@ -25,12 +25,12 @@
    "locality": "榆林市",
    "category": "tender",
    "also_on": [],
-   "summary": "榆林绥德分局采购2022-2025年温室气体排放清单编制服务",
+   "summary": "榆林市生态环境局绥德分局采购2022-2025年温室气体排放清单编制服务，竞争性谈判。",
    "match": 95,
-   "reason": "直接可投的清单编制项目",
+   "reason": "直接可投的温室气体清单编制项目",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -46,8 +46,8 @@
    "track": "carbon_verification",
    "track_label": "碳核查 / 温室气体排放核查",
    "matched": [
-    "排放清单编制",
     "温室气体清单",
+    "排放清单编制",
     "清单编制"
    ],
    "signals": [
@@ -57,12 +57,12 @@
    "locality": "滁州市",
    "category": "tender",
    "also_on": [],
-   "summary": "滁州市采购大气与温室气体融合清单及市级清单编制",
+   "summary": "滁州市招标2025年大气污染物和温室气体融合排放清单编制及2026年市级温室气体清单编制项目。",
    "match": 95,
-   "reason": "直接可投的清单编制项目",
+   "reason": "直接可投的温室气体清单编制项目",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -89,12 +89,12 @@
    "locality": "榆林市",
    "category": "tender",
    "also_on": [],
-   "summary": "榆林靖边分局采购2024-2025年温室气体排放清单编制服务",
+   "summary": "榆林市生态环境局靖边分局采购2024-2025年温室气体排放清单编制服务，竞争性磋商。",
    "match": 95,
-   "reason": "直接可投的清单编制项目",
+   "reason": "直接可投的温室气体清单编制项目",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -111,8 +111,8 @@
    "track_label": "碳市场 / 碳交易",
    "matched": [
     "碳资产管理",
-    "碳中和",
     "碳资产",
+    "碳中和",
     "碳交易"
    ],
    "signals": [
@@ -122,12 +122,12 @@
    "locality": "",
    "category": "tender",
    "also_on": [],
-   "summary": "东南大学招标碳资产管理与模拟碳交易系统平台",
-   "match": 60,
-   "reason": "碳交易系统建设,非咨询业务",
+   "summary": "东南大学招标碳资产管理与模拟碳交易系统项目，预算未明。",
+   "match": 85,
+   "reason": "碳资产管理与碳交易系统，可参与投标",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -154,12 +154,12 @@
    "locality": "",
    "category": "tender",
    "also_on": [],
-   "summary": "深圳国家低碳城论坛执行服务项目招标",
+   "summary": "2026碳达峰碳中和论坛暨深圳国家低碳城论坛执行服务项目招标。",
    "match": 40,
-   "reason": "论坛执行服务,与业务弱相关",
+   "reason": "论坛执行服务，与核心业务关联弱",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -186,12 +186,12 @@
    "locality": "拜城县",
    "category": "tender",
    "also_on": [],
-   "summary": "拜城县采购碳达峰碳中和支撑服务项目",
+   "summary": "拜城县采购碳达峰碳中和支撑服务，竞争性磋商。",
    "match": 85,
-   "reason": "碳中和规划类可投项目",
+   "reason": "碳中和规划支撑服务，可投标",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -207,8 +207,8 @@
    "track": "carbon_footprint",
    "track_label": "碳足迹 / 碳标签",
    "matched": [
-    "产品碳足迹",
     "碳足迹核算",
+    "产品碳足迹",
     "碳足迹"
    ],
    "signals": [
@@ -218,12 +218,12 @@
    "locality": "",
    "category": "tender",
    "also_on": [],
-   "summary": "青岛市招标产品碳足迹核算试点技术服务项目",
+   "summary": "青岛市招标2026年度产品碳足迹核算试点技术服务项目。",
    "match": 95,
-   "reason": "直接可投的碳足迹核算项目",
+   "reason": "直接可投的产品碳足迹核算项目",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -247,12 +247,12 @@
    "locality": "",
    "category": "tender",
    "also_on": [],
-   "summary": "九江市采购温室气体排放清单编制服务项目",
+   "summary": "九江市采购温室气体排放清单编制服务项目，竞争性磋商。",
    "match": 95,
-   "reason": "直接可投的清单编制项目",
+   "reason": "直接可投的温室气体清单编制项目",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -278,12 +278,12 @@
    "locality": "年蚌埠市",
    "category": "tender",
    "also_on": [],
-   "summary": "蚌埠市采购大气与温室气体融合排放清单编制项目",
+   "summary": "蚌埠市采购2025年大气污染物与温室气体融合排放清单编制项目。",
    "match": 95,
-   "reason": "直接可投的清单编制项目",
+   "reason": "直接可投的温室气体清单编制项目",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -309,12 +309,12 @@
    "locality": "吕梁市",
    "category": "tender",
    "also_on": [],
-   "summary": "吕梁市2025年融合排放清单编制项目结果公告",
-   "match": 50,
-   "reason": "已出结果,仅作参考",
+   "summary": "吕梁市2025年大气污染物与温室气体融合排放清单编制项目结果公告。",
+   "match": 30,
+   "reason": "已出结果，无直接商机",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -340,12 +340,12 @@
    "locality": "",
    "category": "tender",
    "also_on": [],
-   "summary": "遂昌县采购2025年度温室气体清单编制项目",
+   "summary": "遂昌县采购2025年度温室气体清单编制项目，竞争性磋商。",
    "match": 95,
-   "reason": "直接可投的清单编制项目",
+   "reason": "直接可投的温室气体清单编制项目",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -371,12 +371,12 @@
    "locality": "湖北省",
    "category": "tender",
    "also_on": [],
-   "summary": "湖北省环科院采购温室气体清单及碳核查大数据平台二期",
-   "match": 80,
-   "reason": "碳核查平台建设,相关商机",
+   "summary": "湖北省生态环境科学研究院采购温室气体清单及碳核查大数据平台二期建设。",
+   "match": 90,
+   "reason": "碳核查大数据平台建设，可投标",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -392,20 +392,20 @@
    "track_label": "碳市场 / 碳交易",
    "matched": [
     "全国碳市场",
-    "碳市场",
-    "碳配额"
+    "碳配额",
+    "碳市场"
    ],
    "signals": [],
    "region": "全国",
    "locality": "",
    "category": "news",
    "also_on": [],
-   "summary": "2025年全国碳市场配额成交量创新高，市场扩容",
-   "match": 55,
-   "reason": "碳市场动态，参考价值有限",
+   "summary": "2025年全国碳市场碳配额成交量创新高，市场扩容",
+   "match": 45,
+   "reason": "碳市场动态，无直接商机",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -415,7 +415,7 @@
    "source_id": "manual_links",
    "source_name": "碳索未来 TL CARBON",
    "kind": "tender",
-   "summary": "江苏印发零碳园区方案，2030年培育10个省级园区并启动申报",
+   "summary": "江苏印发零碳园区实施方案，启动省级申报，2030年建成10个",
    "source_status": "✅ 可用 —— 把文章链接贴进 config/manual_links.txt 即可并入每日推送",
    "score": 74,
    "track": "neutrality",
@@ -434,7 +434,7 @@
    "reason": "零碳园区政策，直接商机线索",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -461,12 +461,12 @@
    "locality": "廊坊市",
    "category": "tender",
    "also_on": [],
-   "summary": "廊坊生态环境局大气与温室气体融合清单编制项目中标",
+   "summary": "廊坊市生态环境局大气与温室气体融合排放清单项目中标",
    "match": 75,
    "reason": "排放清单编制，相关业务线索",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -482,8 +482,8 @@
    "track": "carbon_footprint",
    "track_label": "碳足迹 / 碳标签",
    "matched": [
-    "产品碳足迹",
     "碳足迹核算",
+    "产品碳足迹",
     "碳足迹"
    ],
    "signals": [
@@ -493,12 +493,12 @@
    "locality": "青岛市",
    "category": "tender",
    "also_on": [],
-   "summary": "青岛生态环境局产品碳足迹核算试点技术服务项目中标",
+   "summary": "青岛市产品碳足迹核算试点技术服务项目中标",
    "match": 80,
-   "reason": "碳足迹核算项目，已中标参考",
+   "reason": "碳足迹核算项目，直接相关",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -530,7 +530,7 @@
    "reason": "论坛活动服务，业务关联弱",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -556,12 +556,12 @@
    "locality": "邢台市",
    "category": "tender",
    "also_on": [],
-   "summary": "邢台大气污染物与温室气体融合排放清单编制项目中标",
+   "summary": "邢台市大气与温室气体融合排放清单编制项目中标",
    "match": 75,
    "reason": "排放清单编制，相关业务线索",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -586,12 +586,12 @@
    "locality": "",
    "category": "news",
    "also_on": [],
-   "summary": "宜宾生态环境局温室气体清单编制项目，预算31万元",
+   "summary": "宜宾市生态环境局31万元采购温室气体清单编制项目",
    "match": 90,
-   "reason": "直接可投的清单编制项目",
+   "reason": "直接可投的核查清单项目",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -618,11 +618,11 @@
    "category": "tender",
    "also_on": [],
    "summary": "内蒙古市场监管局产品碳足迹标识认证技术服务招标",
-   "match": 92,
+   "match": 95,
    "reason": "直接可投的碳足迹认证项目",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -649,11 +649,11 @@
    "category": "tender",
    "also_on": [],
    "summary": "河北产品碳足迹标识认证试点建设项目竞争性磋商",
-   "match": 92,
+   "match": 95,
    "reason": "直接可投的碳足迹认证项目",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -679,12 +679,12 @@
    "locality": "库车市",
    "category": "tender",
    "also_on": [],
-   "summary": "库车市十五五碳达峰碳中和节能降碳规划磋商公告",
+   "summary": "库车市碳达峰碳中和节能降碳规划竞争性磋商",
    "match": 90,
-   "reason": "直接可投的双碳规划项目",
+   "reason": "直接可投的碳中和规划项目",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -710,12 +710,12 @@
    "locality": "福建省",
    "category": "tender",
    "also_on": [],
-   "summary": "福建省陶瓷产品碳足迹因子库建设二次招标",
-   "match": 92,
+   "summary": "福建省陶瓷产品碳足迹因子库建设公开招标",
+   "match": 95,
    "reason": "直接可投的碳足迹项目",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -741,12 +741,12 @@
    "locality": "",
    "category": "tender",
    "also_on": [],
-   "summary": "青岛西海岸新区产品碳足迹试点技术服务项目招标",
-   "match": 92,
+   "summary": "青岛西海岸新区产品碳足迹试点技术服务公开招标",
+   "match": 95,
    "reason": "直接可投的碳足迹项目",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -773,12 +773,12 @@
    "locality": "渭南市",
    "category": "tender",
    "also_on": [],
-   "summary": "渭南市发改委采购十五五碳达峰方案及碳排放预算编制,已成交",
-   "match": 88,
-   "reason": "同类达峰方案编制项目,可跟踪后续标段",
+   "summary": "渭南市发改委采购十五五碳达峰行动方案及碳排放预算方案编制,已成交",
+   "match": 95,
+   "reason": "直接可投的碳达峰方案编制项目",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -801,12 +801,12 @@
    "locality": "",
    "category": "news",
    "also_on": [],
-   "summary": "越南企业温室气体清单编制面临挑战",
+   "summary": "越南企业面临温室气体清单编制挑战,能力不足",
    "match": 35,
    "reason": "境外资讯,无直接商机",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -832,12 +832,12 @@
    "locality": "延安市",
    "category": "tender",
    "also_on": [],
-   "summary": "延安宜川分局采购2022-2025碳排放清单编制,已成交",
-   "match": 88,
-   "reason": "直接可投的清单编制类项目",
+   "summary": "延安宜川分局采购2022-2025碳排放清单编制服务,已成交",
+   "match": 95,
+   "reason": "直接可投的排放清单编制项目",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -860,12 +860,12 @@
    "locality": "",
    "category": "news",
    "also_on": [],
-   "summary": "上海清算所推出碳排放权回购清算业务",
+   "summary": "上海清算所推出碳排放权回购清算业务,赋能碳市场",
    "match": 55,
-   "reason": "碳市场机制动态,参考价值有限",
+   "reason": "碳市场机制动态,参考价值",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -893,10 +893,10 @@
    ],
    "summary": "生态环境部发布全国碳市场发展报告2026",
    "match": 60,
-   "reason": "政策报告,影响碳市场业务方向",
+   "reason": "碳市场政策报告,行业参考",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -920,12 +920,12 @@
    "locality": "东营市",
    "category": "tender",
    "also_on": [],
-   "summary": "东营市重点产品碳足迹调查与核算项目成交",
-   "match": 90,
+   "summary": "东营市重点行业产品碳足迹调查与核算项目结果公告",
+   "match": 95,
    "reason": "直接可投的碳足迹核算项目",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -951,10 +951,10 @@
    "also_on": [],
    "summary": "吉安高新区产品碳足迹数字化管理项目结果公示",
    "match": 90,
-   "reason": "直接可投的碳足迹管理项目",
+   "reason": "碳足迹数字化管理项目,可投标",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -977,12 +977,12 @@
    "locality": "",
    "category": "news",
    "also_on": [],
-   "summary": "全国碳市场四周年观察与反思",
-   "match": 45,
-   "reason": "行业评论,无直接商机",
+   "summary": "全国碳市场四周年观察与反思,总结运行情况",
+   "match": 50,
+   "reason": "碳市场行业分析,参考价值",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -1007,10 +1007,10 @@
    "also_on": [],
    "summary": "金融支持零碳园区发展研讨会召开",
    "match": 65,
-   "reason": "零碳园区金融动态,潜在线索",
+   "reason": "零碳园区金融动态,线索参考",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -1036,12 +1036,12 @@
     "生态环境部·温室气体控制",
     "生态环境部·方法学与标准"
    ],
-   "summary": "生态环境部发布产品碳足迹管理体系建设进展报告",
-   "match": 68,
-   "reason": "方法学与政策更新,影响碳足迹业务",
+   "summary": "生态环境部发布产品碳足迹管理体系建设进展报告2026",
+   "match": 70,
+   "reason": "碳足迹政策进展,影响业务方向",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -1065,11 +1065,11 @@
    "category": "news",
    "also_on": [],
    "summary": "南京银行出台支持零碳园区建设专项方案",
-   "match": 62,
-   "reason": "零碳园区金融线索,可对接合作",
+   "match": 60,
+   "reason": "零碳园区金融动态,参考价值",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -1092,17 +1092,17 @@
    "locality": "",
    "category": "news",
    "also_on": [],
-   "summary": "国务院印发十五五碳达峰行动方案",
-   "match": 75,
-   "reason": "国家级政策,带动达峰方案编制需求",
+   "summary": "国务院印发十五五碳达峰行动方案通知",
+   "match": 85,
+   "reason": "国家碳达峰政策,高价值导向",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
-   "title": "智算占99%、绿电怎么喂？庆阳零碳园区研讨",
-   "url": "http://www.tanjiaoyi.com/article-111263-1.html",
+   "title": "零碳工厂成“绿色工厂2.0”：头部制造企业",
+   "url": "http://www.tanjiaoyi.com/article-111273-1.html",
    "date": null,
    "source_id": "tanjiaoyi_com",
    "source_name": "中国碳交易网",
@@ -1112,18 +1112,17 @@
    "track": "neutrality",
    "track_label": "碳中和规划 / 零碳园区",
    "matched": [
-    "零碳园区",
-    "零碳",
-    "绿电"
+    "零碳工厂",
+    "零碳"
    ],
    "signals": [],
-   "region": "甘肃",
+   "region": "未分类",
    "locality": "",
    "category": "news",
    "also_on": [],
-   "summary": "庆阳零碳园区研讨智算绿电供给方案",
-   "match": 55,
-   "reason": "零碳园区行业动态,非采购项目",
+   "summary": "头部制造企业推动零碳工厂成绿色工厂升级方向",
+   "match": 45,
+   "reason": "行业趋势动态,无直接商机",
    "ai": true,
    "is_new": true,
    "is_fresh": true,
@@ -1151,12 +1150,12 @@
    "locality": "榆林市",
    "category": "tender",
    "also_on": [],
-   "summary": "榆林生态环境局采购2025温室气体排放清单编制服务",
+   "summary": "榆林市生态环境局采购2025年温室气体排放清单编制服务",
    "match": 95,
-   "reason": "直接可投的核查清单项目",
+   "reason": "直接可投的温室气体清单项目",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -1181,12 +1180,12 @@
    "locality": "",
    "category": "tender",
    "also_on": [],
-   "summary": "中科院大气所招标采购碳排放监测仪",
-   "match": 30,
+   "summary": "中科院大气物理所采购碳排放监测仪",
+   "match": 25,
    "reason": "仪器设备采购,非咨询服务",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -1210,12 +1209,12 @@
    "locality": "",
    "category": "tender",
    "also_on": [],
-   "summary": "首都机场询比能源审计及温室气体排放管理服务",
+   "summary": "首都机场采购能源审计及温室气体排放管理提升服务",
    "match": 92,
    "reason": "直接可投的碳盘查审计项目",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -1240,12 +1239,12 @@
    "locality": "",
    "category": "tender",
    "also_on": [],
-   "summary": "东南大学招标碳中和金融AI算力网络调度平台",
-   "match": 25,
-   "reason": "IT平台采购,与业务弱相关",
+   "summary": "东南大学采购碳中和金融AI算力平台网络调度系统",
+   "match": 20,
+   "reason": "IT平台采购,与碳业务弱相关",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -1270,12 +1269,12 @@
    "locality": "",
    "category": "tender",
    "also_on": [],
-   "summary": "工信部招标动力电池碳足迹管理支撑工作",
-   "match": 90,
+   "summary": "工信部开展动力电池碳足迹管理支撑工作招标",
+   "match": 95,
    "reason": "直接可投的碳足迹管理项目",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -1300,12 +1299,12 @@
    "locality": "",
    "category": "tender",
    "also_on": [],
-   "summary": "中央民族大学比选采购2025碳排放配额BEA",
+   "summary": "中央民族大学采购2025年度碳排放配额BEA",
    "match": 60,
-   "reason": "配额采购,碳市场参考线索",
+   "reason": "碳市场交易线索,非咨询服务",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -1330,12 +1329,12 @@
    "locality": "",
    "category": "tender",
    "also_on": [],
-   "summary": "固定资产投资项目节能审查碳排放评价验收二次招标",
+   "summary": "某地招标节能审查和碳排放评价及验收项目",
    "match": 88,
-   "reason": "可投的碳排放评价审查项目",
+   "reason": "碳排放评价服务,可投标",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -1361,11 +1360,11 @@
    "category": "tender",
    "also_on": [],
    "summary": "山西科技学院碳中和虚拟仿真实验室建设结果公告",
-   "match": 35,
-   "reason": "实验室建设已定标,无商机",
+   "match": 30,
+   "reason": "已结束的实验室建设,无商机",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -1390,12 +1389,12 @@
    "locality": "",
    "category": "tender",
    "also_on": [],
-   "summary": "东南大学招标碳中和金融AI多维异构网络通讯系统",
-   "match": 25,
-   "reason": "IT系统采购,与业务弱相关",
+   "summary": "东南大学采购碳中和金融AI平台多维异构网络系统",
+   "match": 20,
+   "reason": "IT系统采购,与碳业务弱相关",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -1420,12 +1419,12 @@
    "locality": "榆林市",
    "category": "tender",
    "also_on": [],
-   "summary": "榆林气象局招标温室气体与碳中和监测系统工程",
-   "match": 45,
-   "reason": "监测工程货物采购,参考价值",
+   "summary": "榆林市气象局采购温室气体与碳中和监测系统货物",
+   "match": 35,
+   "reason": "监测设备采购,非咨询服务",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -1450,12 +1449,12 @@
    "locality": "",
    "category": "tender",
    "also_on": [],
-   "summary": "东南大学招标碳中和金融AI能流碳流数据接入系统",
-   "match": 30,
-   "reason": "IT系统采购,与业务弱相关",
+   "summary": "东南大学采购碳中和金融AI平台能流碳流数据系统",
+   "match": 25,
+   "reason": "IT数据系统采购,弱相关",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -1485,7 +1484,7 @@
    "reason": "直接可投的碳足迹建设项目",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -1510,12 +1509,12 @@
    "locality": "",
    "category": "tender",
    "also_on": [],
-   "summary": "山东石油化工学院碳中和联合研究院采购实验室设备,公开招标",
+   "summary": "山东石油化工学院采购碳中和联合研究院实验室设备,公开招标",
    "match": 25,
-   "reason": "设备采购,非碳咨询业务",
+   "reason": "实验室设备采购,非碳咨询业务",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -1540,12 +1539,12 @@
    "locality": "",
    "category": "tender",
    "also_on": [],
-   "summary": "山东石油化工学院碳中和重点实验室采购设备,竞争性磋商",
+   "summary": "山东石油化工学院采购碳中和重点实验室设备,竞争性磋商",
    "match": 25,
-   "reason": "实验室设备采购,与咨询无关",
+   "reason": "设备采购,与碳咨询业务无关",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -1574,7 +1573,7 @@
    "reason": "碳排放预算课题,可投标咨询项目",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -1596,12 +1595,12 @@
    "locality": "",
    "category": "news",
    "also_on": [],
-   "summary": "文章探讨区域温室气体清单含碳量核算方法",
+   "summary": "文章探讨区域温室气体清单含碳量核算问题",
    "match": 55,
    "reason": "核查方法参考,无直接商机",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -1625,10 +1624,10 @@
    "also_on": [],
    "summary": "德国碳市场拍卖110家竞拍者仅获配2.2%,溢价触顶",
    "match": 45,
-   "reason": "国际碳市场动态,参考价值",
+   "reason": "国际碳市场动态,参考价值有限",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -1650,12 +1649,12 @@
    "locality": "",
    "category": "news",
    "also_on": [],
-   "summary": "南美最大ETS与全球最大碳市场合作,争夺规则制定权",
+   "summary": "南美最大ETS与全球最大碳市场对接,参与规则制定",
    "match": 45,
-   "reason": "国际碳市场资讯,参考价值",
+   "reason": "国际碳市场资讯,无直接商机",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -1677,12 +1676,12 @@
    "locality": "",
    "category": "news",
    "also_on": [],
-   "summary": "阿根廷农工总会测算碳市场立法后年创汇最高39亿美元",
+   "summary": "阿根廷碳市场立法后年创汇最高可达39亿美元",
    "match": 40,
-   "reason": "国际碳市场资讯,关系较弱",
+   "reason": "国际碳市场政策资讯",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -1705,11 +1704,11 @@
    "category": "news",
    "also_on": [],
    "summary": "欧洲碳配额周涨1.6%,周中回落后重新走强",
-   "match": 40,
+   "match": 35,
    "reason": "碳价行情资讯,参考价值低",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -1731,39 +1730,12 @@
    "locality": "",
    "category": "news",
    "also_on": [],
-   "summary": "文章探讨金融机构如何接轨碳市场",
+   "summary": "文章分析金融机构如何接轨碳市场",
    "match": 50,
    "reason": "碳金融动态,有参考价值",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
-   "first_seen": "2026-09-22"
-  },
-  {
-   "title": "甘肃办碳达峰培训班：副省长到场，三天啃统",
-   "url": "http://www.tanjiaoyi.com/article-111260-1.html",
-   "date": "2026-09-21",
-   "source_id": "tanjiaoyi_com",
-   "source_name": "中国碳交易网",
-   "kind": "news",
-   "source_status": "实测可用",
-   "score": 25,
-   "track": "neutrality",
-   "track_label": "碳中和规划 / 零碳园区",
-   "matched": [
-    "碳达峰"
-   ],
-   "signals": [],
-   "region": "甘肃",
-   "locality": "",
-   "category": "news",
-   "also_on": [],
-   "summary": "甘肃举办碳达峰培训班,副省长出席,为期三天",
-   "match": 45,
-   "reason": "地方碳达峰培训动态",
-   "ai": true,
-   "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -1785,12 +1757,12 @@
    "locality": "",
    "category": "news",
    "also_on": [],
-   "summary": "报道称碳市场活力效能提升,中国递出绿色名片",
+   "summary": "报道称中国碳市场活力效能提升,成绿色名片",
    "match": 40,
    "reason": "碳市场宣传资讯,无商机",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -1813,12 +1785,12 @@
    "locality": "哈密市",
    "category": "tender",
    "also_on": [],
-   "summary": "哈密市征集节能报告和碳排放评价评审服务框架协议供应商",
-   "match": 95,
-   "reason": "直接可投的碳排放评价评审采购项目",
+   "summary": "哈密市采购固定资产投资项目节能报告和碳排放评价评审服务",
+   "match": 92,
+   "reason": "直接可投的碳排放评价评审项目",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -1840,12 +1812,12 @@
    "locality": "",
    "category": "news",
    "also_on": [],
-   "summary": "欧盟碳配额价格回升至85.82欧元,单日涨1.27%",
+   "summary": "欧盟碳配额价回升至85.82欧元，单日涨1.27%",
    "match": 45,
-   "reason": "碳价行情动态,参考价值有限",
+   "reason": "碳价行情，参考价值有限",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -1867,12 +1839,12 @@
    "locality": "",
    "category": "news",
    "also_on": [],
-   "summary": "报道绿色金融精准赋能碳减排的实践路径",
+   "summary": "绿色金融精准赋能碳减排，报道相关实践",
    "match": 50,
-   "reason": "绿色金融行业动态,无直接商机",
+   "reason": "绿色金融动态，无直接商机",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -1894,12 +1866,12 @@
    "locality": "",
    "category": "news",
    "also_on": [],
-   "summary": "中国碳市场累计成交量近10亿吨,居国际前列",
+   "summary": "中国碳市场累计成交量近10亿吨",
    "match": 55,
-   "reason": "碳市场数据动态,有参考价值",
+   "reason": "碳市场数据，行业参考",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -1921,12 +1893,12 @@
    "locality": "",
    "category": "news",
    "also_on": [],
-   "summary": "金融机构加速入场,激活碳市场交易活力",
+   "summary": "金融机构加速入场激活碳市场",
    "match": 55,
-   "reason": "碳金融动态,无直接投标机会",
+   "reason": "碳市场动态，参考价值",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -1948,12 +1920,12 @@
    "locality": "",
    "category": "news",
    "also_on": [],
-   "summary": "中国碳市场标准获国际认可,提升全球话语权",
-   "match": 50,
-   "reason": "碳市场政策动态,参考价值一般",
+   "summary": "全球碳市场标准体系新增中国刻度",
+   "match": 60,
+   "reason": "碳市场标准动态，有参考",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -1976,11 +1948,11 @@
    "category": "news",
    "also_on": [],
    "summary": "土耳其主权财富基金发布可持续金融框架",
-   "match": 30,
-   "reason": "境外金融资讯,与业务关系弱",
+   "match": 35,
+   "reason": "境外金融资讯，关系弱",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -2002,12 +1974,12 @@
    "locality": "",
    "category": "news",
    "also_on": [],
-   "summary": "2026金融支持绿色科技大会暨创蓝碳中和先锋活动预告",
-   "match": 60,
-   "reason": "碳中和行业会议,可拓展资源",
+   "summary": "2026金融支持绿色科技大会暨碳中和先锋活动预告",
+   "match": 65,
+   "reason": "行业会议，潜在人脉线索",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -2029,12 +2001,12 @@
    "locality": "",
    "category": "news",
    "also_on": [],
-   "summary": "香港绿色金融分类目录扩围,更多行业可贴绿标",
-   "match": 55,
-   "reason": "绿色金融政策动态,参考价值中等",
+   "summary": "香港绿色金融分类目录扩围，更多行业可贴绿标",
+   "match": 60,
+   "reason": "绿色金融政策，参考价值",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -2056,12 +2028,12 @@
    "locality": "",
    "category": "news",
    "also_on": [],
-   "summary": "生态环境部印发全国碳市场发电行业2025、2026年度配额方案",
-   "match": 80,
-   "reason": "碳市场配额政策,影响核查与交易业务",
+   "summary": "印发全国碳市场发电行业2025、2026年度配额方案",
+   "match": 85,
+   "reason": "碳市场政策，影响核查与交易",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -2084,11 +2056,11 @@
    "category": "news",
    "also_on": [],
    "summary": "印度需将气候适应支出转为前置投资",
-   "match": 25,
-   "reason": "境外气候适应资讯,关系弱",
+   "match": 30,
+   "reason": "境外气候资讯，关系弱",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -2110,12 +2082,12 @@
    "locality": "",
    "category": "news",
    "also_on": [],
-   "summary": "发布符合中欧共同分类目录标准的中国存量绿色债券清单",
-   "match": 65,
-   "reason": "绿色债券清单,绿色金融业务参考",
+   "summary": "发布符合中欧共同分类目录的中国存量绿色债券清单",
+   "match": 70,
+   "reason": "绿色债券清单，ESG业务线索",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -2137,12 +2109,12 @@
    "locality": "",
    "category": "news",
    "also_on": [],
-   "summary": "全国碳市场成交额突破629亿元,覆盖范围扩大",
+   "summary": "全国碳排放权成交额突破629亿元，覆盖范围扩大",
    "match": 55,
-   "reason": "碳市场行情动态,参考价值有限",
+   "reason": "碳市场数据，行业参考",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -2166,10 +2138,10 @@
    "also_on": [],
    "summary": "绿金委环境信息披露工作组召开2026年课题开题会",
    "match": 45,
-   "reason": "ESG披露课题,间接参考",
+   "reason": "行业动态,无直接商机",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -2193,10 +2165,10 @@
    "also_on": [],
    "summary": "首个绿色金融专业委员会成立",
    "match": 30,
-   "reason": "旧闻资讯,无商机",
+   "reason": "纯资讯,与业务关系弱",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -2219,11 +2191,11 @@
    "category": "news",
    "also_on": [],
    "summary": "绿金委发布2025/2026年度工作报告",
-   "match": 45,
-   "reason": "绿色金融政策动态,可参考",
+   "match": 40,
+   "reason": "行业报告,参考价值有限",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -2245,12 +2217,12 @@
    "locality": "",
    "category": "news",
    "also_on": [],
-   "summary": "2026绿金委年会在京举行,探讨绿色与转型金融",
-   "match": 50,
+   "summary": "2026绿金委年会在京举行探讨绿色与转型金融",
+   "match": 45,
    "reason": "行业会议动态,无直接商机",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -2273,11 +2245,11 @@
    "category": "news",
    "also_on": [],
    "summary": "2026绿金委年会报名通道开启",
-   "match": 25,
-   "reason": "会议报名资讯,关系弱",
+   "match": 35,
+   "reason": "会议报名,与业务关系弱",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -2300,12 +2272,12 @@
    "locality": "",
    "category": "news",
    "also_on": [],
-   "summary": "湖州碳中和银行建设入选转型金融案例",
-   "match": 60,
-   "reason": "碳中和银行案例,有参考价值",
+   "summary": "湖州碳中和银行建设案例入选转型金融汇编",
+   "match": 55,
+   "reason": "绿色金融案例,有参考价值",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -2329,10 +2301,10 @@
    "also_on": [],
    "summary": "芦溪县转型金融赋能县域低碳发展案例",
    "match": 55,
-   "reason": "县域低碳案例,参考价值一般",
+   "reason": "绿色金融案例,有参考价值",
    "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -2354,12 +2326,12 @@
    "locality": "",
    "category": "news",
    "also_on": [],
-   "summary": "转型金融案例汇编 | “财政政策+央行资金+金融工具” 推动...",
-   "match": 25,
-   "reason": "绿色金融 / ESG",
-   "ai": false,
+   "summary": "财政政策加央行资金加金融工具推动转型金融案例",
+   "match": 55,
+   "reason": "绿色金融案例,有参考价值",
+   "ai": true,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -2386,7 +2358,7 @@
    "reason": "绿色金融 / ESG",
    "ai": false,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -2413,7 +2385,7 @@
    "reason": "碳中和规划 / 零碳园区",
    "ai": false,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -2440,39 +2412,12 @@
    "reason": "碳市场 / 碳交易",
    "ai": false,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
-   "title": "甘肃吹响 “十五五” 碳达峰冲锋号：3 天集",
-   "url": "http://www.tanjiaoyi.com/article-111264-1.html",
-   "date": null,
-   "source_id": "tanjiaoyi_com",
-   "source_name": "中国碳交易网",
-   "kind": "news",
-   "source_status": "实测可用",
-   "score": 25,
-   "track": "neutrality",
-   "track_label": "碳中和规划 / 零碳园区",
-   "matched": [
-    "碳达峰"
-   ],
-   "signals": [],
-   "region": "甘肃",
-   "locality": "",
-   "category": "news",
-   "also_on": [],
-   "summary": "甘肃吹响 “十五五” 碳达峰冲锋号：3 天集",
-   "match": 25,
-   "reason": "碳中和规划 / 零碳园区",
-   "ai": false,
-   "is_new": true,
-   "is_fresh": true,
-   "first_seen": "2026-09-22"
-  },
-  {
-   "title": "海南“十五五”要建热带零碳样板：博鳌经验",
-   "url": "http://www.tanjiaoyi.com/article-111261-1.html",
+   "title": "工业零碳从概念走进展厅：北京这场论坛把园",
+   "url": "http://www.tanjiaoyi.com/article-111274-1.html",
    "date": null,
    "source_id": "tanjiaoyi_com",
    "source_name": "中国碳交易网",
@@ -2485,11 +2430,11 @@
     "零碳"
    ],
    "signals": [],
-   "region": "未分类",
+   "region": "北京",
    "locality": "",
    "category": "news",
    "also_on": [],
-   "summary": "海南“十五五”要建热带零碳样板：博鳌经验",
+   "summary": "工业零碳从概念走进展厅：北京这场论坛把园",
    "match": 25,
    "reason": "碳中和规划 / 零碳园区",
    "ai": false,
@@ -2521,35 +2466,7 @@
    "reason": "碳中和规划 / 零碳园区",
    "ai": false,
    "is_new": true,
-   "is_fresh": true,
-   "first_seen": "2026-09-22"
-  },
-  {
-   "title": "林权抵押、碳汇质押、EOD 造血：绿色金融不",
-   "url": "http://www.tanjiaoyi.com/article-111195-1.html",
-   "date": null,
-   "source_id": "tanjiaoyi_com",
-   "source_name": "中国碳交易网",
-   "kind": "news",
-   "source_status": "实测可用",
-   "score": 25,
-   "track": "ccer",
-   "track_label": "CCER / 自愿减排项目",
-   "matched": [
-    "绿色金融",
-    "碳汇"
-   ],
-   "signals": [],
-   "region": "未分类",
-   "locality": "",
-   "category": "news",
-   "also_on": [],
-   "summary": "林权抵押、碳汇质押、EOD 造血：绿色金融不",
-   "match": 25,
-   "reason": "CCER / 自愿减排项目",
-   "ai": false,
-   "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -2577,7 +2494,7 @@
    "reason": "规则匹配",
    "ai": false,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -2605,7 +2522,7 @@
    "reason": "规则匹配",
    "ai": false,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -2633,7 +2550,7 @@
    "reason": "规则匹配",
    "ai": false,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -2661,7 +2578,7 @@
    "reason": "规则匹配",
    "ai": false,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -2689,7 +2606,7 @@
    "reason": "规则匹配",
    "ai": false,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -2717,7 +2634,7 @@
    "reason": "规则匹配",
    "ai": false,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -2745,7 +2662,7 @@
    "reason": "规则匹配",
    "ai": false,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   },
   {
@@ -2773,9 +2690,9 @@
    "reason": "规则匹配",
    "ai": false,
    "is_new": true,
-   "is_fresh": true,
+   "is_fresh": false,
    "first_seen": "2026-09-22"
   }
  ],
- "generated_at": "2026-09-22T09:32:03.464824+08:00"
+ "generated_at": "2026-09-22T09:51:52.074712+08:00"
 }
