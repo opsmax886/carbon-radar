@@ -437,8 +437,14 @@ def main() -> int:
         if push_items:
             ok = notify_mod.push_all(push_items, today, stats, site_url())
         elif (cfg_sources.get("settings") or {}).get("push_heartbeat", True):
-            # 没有新增也要报个平安 —— 否则你无法区分"今天真没标讯"和"系统挂了"
-            ok = notify_mod.push_heartbeat(today, stats, site_url())
+            # 没有新增也要报个平安 —— 否则你无法区分"今天真没标讯"和"系统挂了"。
+            # 但如果今天已经成功推送过(说明是备用时段又被触发了一次),
+            # 就不要再发,免得你一天收到两条消息。
+            if any(v == today for v in pushed.values()):
+                ok, push_items = True, []
+                log("  今日已推送过,跳过平安消息(备用时段重复运行)")
+            else:
+                ok = notify_mod.push_heartbeat(today, stats, site_url())
         else:
             ok, push_items = True, []
             log("今日无新增,按配置不推送")
