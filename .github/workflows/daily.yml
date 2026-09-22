@@ -22,6 +22,14 @@ on:
     - cron: '12 1 * * *'    # 北京时间每天 09:12(主)
     - cron: '42 2 * * *'    # 北京时间每天 10:42(备用,仅当主时段被丢弃时起作用)
   workflow_dispatch:        # 也支持在网页上手动点一下立即运行
+    # 加一个"触发来源"入参:外部定时服务(cron-job.org)触发时会填 cron-job.org,
+    # 这样提交记录里能一眼看出这次是自动的还是手动点的 ——
+    # 否则两者在 GitHub 上都显示 workflow_dispatch,根本分不清。
+    inputs:
+      trigger:
+        description: '触发来源(外部定时服务自动填写,手动运行可留空)'
+        required: false
+        default: ''
 
 permissions:
   contents: write           # 需要写权限才能把新数据提交回仓库
@@ -63,6 +71,10 @@ jobs:
       # 否则网页看板会跟着一起停更 —— 两件事应该解耦。
       - name: 提交更新后的数据
         if: always()
+        # 用环境变量传参,不要把 ${{ inputs.trigger }} 直接插进 shell ——
+        # 直接插值等于把外部输入拼进命令行,存在注入风险
+        env:
+          TRIGGER_SRC: ${{ inputs.trigger }}
         run: |
           git config user.name  "carbon-radar-bot"
           git config user.email "carbon-radar-bot@users.noreply.github.com"
@@ -71,7 +83,9 @@ jobs:
             echo "数据无变化,跳过提交"
             exit 0
           fi
-          git commit -m "数据更新 $(TZ='Asia/Shanghai' date +'%Y-%m-%d %H:%M')"
+          SUFFIX=""
+          if [ -n "${TRIGGER_SRC:-}" ]; then SUFFIX=" [${TRIGGER_SRC}]"; fi
+          git commit -m "数据更新 $(TZ='Asia/Shanghai' date +'%Y-%m-%d %H:%M')${SUFFIX}"
           # 源探测工作流可能同时在提交,直接 push 会被拒(非快进)。
           # 先 rebase 再推,并重试几次。
           BRANCH="${{ github.event.repository.default_branch }}"
