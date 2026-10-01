@@ -108,11 +108,11 @@
     "zero_streak": 0
   },
   "ccgp_keywords": {
-    "consecutive_failures": 0,
+    "consecutive_failures": 1,
     "last_attempt": "2026-10-01",
     "last_success": "2026-10-01",
     "last_count": 88,
-    "last_error": null,
+    "last_error": "5 个关键词全部失败(最后一个: 碳排放)",
     "newest_item_date": "2026-09-30",
     "zero_streak": 0
   },
