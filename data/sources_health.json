@@ -68,7 +68,7 @@
     "last_success": "2026-10-15",
     "last_count": 25,
     "last_error": null,
-    "newest_item_date": "2026-10-14",
+    "newest_item_date": "2026-10-15",
     "zero_streak": 0
   },
   "greenfinance": {
@@ -108,11 +108,11 @@
     "zero_streak": 0
   },
   "ccgp_keywords": {
-    "consecutive_failures": 1,
+    "consecutive_failures": 0,
     "last_attempt": "2026-10-15",
     "last_success": "2026-10-15",
     "last_count": 83,
-    "last_error": "5 个关键词全部失败(最后一个: 碳排放)",
+    "last_error": null,
     "newest_item_date": "2026-10-14",
     "zero_streak": 0
   },
