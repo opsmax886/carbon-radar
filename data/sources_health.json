@@ -117,9 +117,9 @@
     "zero_streak": 0
   },
   "bj_ccgp": {
-    "consecutive_failures": 0,
+    "consecutive_failures": 1,
     "last_attempt": "2026-10-28",
-    "last_error": null,
+    "last_error": "请求失败: timed out",
     "last_success": "2026-10-28",
     "last_count": 11,
     "newest_item_date": null,
