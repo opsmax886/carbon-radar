@@ -81,11 +81,11 @@
     "zero_streak": 0
   },
   "tanjiaoyi_com": {
-    "consecutive_failures": 2,
+    "consecutive_failures": 0,
     "last_attempt": "2026-10-31",
-    "last_success": "2026-10-30",
+    "last_success": "2026-10-31",
     "last_count": 25,
-    "last_error": "请求失败: timed out",
+    "last_error": null,
     "newest_item_date": "2026-10-30",
     "zero_streak": 0
   },
