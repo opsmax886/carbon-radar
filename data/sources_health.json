@@ -68,7 +68,7 @@
     "last_success": "2026-11-06",
     "last_count": 25,
     "last_error": null,
-    "newest_item_date": "2026-11-04",
+    "newest_item_date": "2026-11-06",
     "zero_streak": 0
   },
   "greenfinance": {
@@ -86,7 +86,7 @@
     "last_success": "2026-11-06",
     "last_count": 25,
     "last_error": null,
-    "newest_item_date": "2026-11-05",
+    "newest_item_date": "2026-11-06",
     "zero_streak": 0
   },
   "mee_methodology": {
@@ -108,7 +108,7 @@
     "zero_streak": 0
   },
   "ccgp_keywords": {
-    "consecutive_failures": 1,
+    "consecutive_failures": 2,
     "last_attempt": "2026-11-06",
     "last_success": "2026-11-05",
     "last_count": 83,
