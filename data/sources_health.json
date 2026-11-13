@@ -50,7 +50,7 @@
     "last_success": "2026-11-13",
     "last_count": 15,
     "last_error": null,
-    "newest_item_date": "2026-10-31",
+    "newest_item_date": "2026-11-13",
     "zero_streak": 0
   },
   "gov_policy": {
@@ -68,7 +68,7 @@
     "last_success": "2026-11-13",
     "last_count": 25,
     "last_error": null,
-    "newest_item_date": "2026-11-12",
+    "newest_item_date": "2026-11-13",
     "zero_streak": 0
   },
   "greenfinance": {
@@ -86,7 +86,7 @@
     "last_success": "2026-11-13",
     "last_count": 25,
     "last_error": null,
-    "newest_item_date": "2026-11-12",
+    "newest_item_date": "2026-11-13",
     "zero_streak": 0
   },
   "mee_methodology": {
@@ -108,7 +108,7 @@
     "zero_streak": 0
   },
   "ccgp_keywords": {
-    "consecutive_failures": 22,
+    "consecutive_failures": 23,
     "last_attempt": "2026-11-13",
     "last_success": "2026-11-05",
     "last_count": 83,
